@@ -5,10 +5,26 @@ public class NumOfProvinces547 {
         int[][] isConnected = {{1,1,0},{1,1,0},{0,0,1}};
         System.out.println(findCircleNum(isConnected));
     }
-    public static int findCircleNum(int[][] isConnected) {
-        int provinceCnt = 0;
 
-        return provinceCnt;
+//    dfs; time: n^2, space: O(n)
+    public static int findCircleNum(int[][] isConnected) {
+        int numOfComponents = 0, n = isConnected.length;
+        boolean[] visited = new boolean[n];
+        for(int i = 0 ; i < n ; i++) {
+            if(!visited[i]) {
+                ++numOfComponents;
+                dfs(i, isConnected, visited);
+            }
+        }
+        return numOfComponents;
+    }
+    private static void dfs(int node, int[][] isConnected, boolean[] visited) {
+        visited[node] = true;
+        for(int i = 0 ; i < isConnected.length ; i++) {
+            if(isConnected[node][i] != 0 && !visited[i]) {
+                dfs(i, isConnected, visited);
+            }
+        }
     }
 }
 
