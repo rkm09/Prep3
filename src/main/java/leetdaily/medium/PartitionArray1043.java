@@ -1,11 +1,14 @@
 package leetdaily.medium;
 
+
 public class PartitionArray1043 {
     private static Integer[] dp;
     public static void main(String[] args) {
         int[] arr = {1,15,7,9,2,5,10};
-        System.out.println(maxSumAfterPartitioning(arr, 3));
+        System.out.println(maxSumAfterPartitioning1(arr, 3));
     }
+
+//    top down dp; time: O(n.k), space: O(n)
     public static int maxSumAfterPartitioning(int[] arr, int k) {
         dp = new Integer[arr.length];
         return maxSum(arr, k, 0);
@@ -26,6 +29,23 @@ public class PartitionArray1043 {
         }
         return dp[start] = ans;
     }
+
+//    bottom up dp; time: O(n.k), space: O(n)
+    public static int maxSumAfterPartitioning1(int[] arr, int k) {
+        int n = arr.length;
+        int[] dp = new int[n + 1];
+        for(int start = n - 1 ; start >= 0 ; start--) {
+            int currSum = 0, ans = 0;
+            int end = Math.min(start + k, n);
+            for(int i = start; i < end; i++) {
+                currSum = Math.max(currSum, arr[i]);
+                ans = Math.max(ans, currSum * (i - start + 1) + dp[i + 1]);
+            }
+            dp[start] = ans;
+        }
+        return dp[0];
+    }
+
 }
 
 /*
