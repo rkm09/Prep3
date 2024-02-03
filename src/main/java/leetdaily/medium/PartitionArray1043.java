@@ -1,10 +1,13 @@
 package leetdaily.medium;
 
 
+import java.util.Arrays;
+
 public class PartitionArray1043 {
     private static Integer[] dp;
     public static void main(String[] args) {
         int[] arr = {1,15,7,9,2,5,10};
+//        System.out.println(Arrays.toString(arr));
         System.out.println(maxSumAfterPartitioning1(arr, 3));
     }
 
