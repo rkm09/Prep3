@@ -5,10 +5,12 @@ import java.util.List;
 
 public class EventualSafeNodes802 {
     public static void main(String[] args) {
-
+        int[][] graph = {{1,2},{2,3},{5},{0},{5},{},{}};
+        System.out.println(eventualSafeNodes(graph));
     }
     public static List<Integer> eventualSafeNodes(int[][] graph) {
         List<Integer> result = new ArrayList<>();
+
         return result;
     }
 }
