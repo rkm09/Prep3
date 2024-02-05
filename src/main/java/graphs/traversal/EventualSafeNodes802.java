@@ -4,14 +4,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventualSafeNodes802 {
+    private static List<Integer> result;
+    private static List<Integer> terminal;
+    private static boolean[] visited;
     public static void main(String[] args) {
         int[][] graph = {{1,2},{2,3},{5},{0},{5},{},{}};
         System.out.println(eventualSafeNodes(graph));
     }
     public static List<Integer> eventualSafeNodes(int[][] graph) {
-        List<Integer> result = new ArrayList<>();
-
+        result = new ArrayList<>();
+        visited = new boolean[graph.length];
+        terminal = new ArrayList<>();
+        for(int i = 0 ; i < graph.length ; i++) {
+            if(graph[i].length == 0) {
+                terminal.add(i);
+//                result.add(i);
+            }
+        }
+        for(int i = 0 ; i < graph.length ; i++) {
+            if(dfs(graph, i) && !result.contains(i)) {
+                result.add(i);
+            }
+        }
         return result;
+    }
+    private static boolean dfs(int[][] graph, int node) {
+        visited[node] = true;
+        if(terminal.contains(node)) {
+            return true;
+        }
+        boolean safe = false;
+        for(int neighbour : graph[node]) {
+            if(!visited[neighbour]) {
+                safe = dfs(graph, neighbour);
+                if(!safe) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 
