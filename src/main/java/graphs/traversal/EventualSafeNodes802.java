@@ -4,45 +4,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventualSafeNodes802 {
-    private static List<Integer> result;
-    private static List<Integer> terminal;
-    private static boolean[] visited;
     public static void main(String[] args) {
         int[][] graph = {{1,2},{2,3},{5},{0},{5},{},{}};
         System.out.println(eventualSafeNodes(graph));
     }
+
+//    dfs; time: O(m + n), space: O(n)
     public static List<Integer> eventualSafeNodes(int[][] graph) {
-        result = new ArrayList<>();
-        visited = new boolean[graph.length];
-        terminal = new ArrayList<>();
-        for(int i = 0 ; i < graph.length ; i++) {
-            if(graph[i].length == 0) {
-                terminal.add(i);
-//                result.add(i);
+        int n = graph.length;
+        boolean[] visited = new boolean[n];
+        boolean[] inStack = new boolean[n];
+        List<Integer> safeNodes = new ArrayList<>();
+
+        for(int i = 0 ; i < n ; i++) {
+            dfs(graph, i, visited, inStack);
+        }
+        for(int i = 0 ; i < n ; i++) {
+            if(!inStack[i]) {
+                safeNodes.add(i);
             }
         }
-        for(int i = 0 ; i < graph.length ; i++) {
-            if(dfs(graph, i) && !result.contains(i)) {
-                result.add(i);
-            }
-        }
-        return result;
+        return safeNodes;
     }
-    private static boolean dfs(int[][] graph, int node) {
-        visited[node] = true;
-        if(terminal.contains(node)) {
+    private static boolean dfs(int[][] adj, int node, boolean[] visited, boolean[] inStack) {
+//        check current recursion stack [to check for ancestor(presence of a cycle)]
+        if(inStack[node]) {
             return true;
         }
-        boolean safe = false;
-        for(int neighbour : graph[node]) {
-            if(!visited[neighbour]) {
-                safe = dfs(graph, neighbour);
-                if(!safe) {
-                    return false;
-                }
+        if(visited[node]) {
+            return false;
+        }
+        visited[node] = true;
+        inStack[node] = true;
+        for(int neighbour : adj[node]) {
+            if(dfs(adj, neighbour, visited, inStack)) {
+                return true;
             }
         }
-        return true;
+//        release from stack once branch traversed fully
+        inStack[node] = false;
+        return false;
     }
 }
 
