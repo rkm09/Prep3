@@ -1,7 +1,6 @@
 package graphs.traversal;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -15,7 +14,7 @@ public class KeysAndRooms841 {
         System.out.println(canVisitAllRooms(rooms));
     }
 
-//   [def]; dfs; time: O(n+m), space: O(n)
+//   [def]; dfs (recursive); time: O(n+e), space: O(n)
     public static boolean canVisitAllRooms(List<List<Integer>> rooms) {
         int n = rooms.size();
         boolean[] visited = new boolean[n];
@@ -32,6 +31,27 @@ public class KeysAndRooms841 {
             if(!visited[neighbour])
                 dfs(rooms, visited, neighbour);
         }
+    }
+
+//    dfs (iterative) ; time: O(n+e), space: O(n)
+    public static boolean canVisitAllRooms1(List<List<Integer>> rooms) {
+        int n = rooms.size();
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.push(0);
+        boolean[] visited = new boolean[n];
+        while(!stack.isEmpty()) {
+            int node = stack.pop();
+            visited[node] = true;
+            for(int neighbour : rooms.get(node)) {
+                if(!visited[neighbour])
+                    stack.push(neighbour);
+            }
+        }
+        for(int i = 0 ; i < n ; i++) {
+            if(!visited[i])
+                return false;
+        }
+        return true;
     }
 }
 
