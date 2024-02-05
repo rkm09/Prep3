@@ -1,12 +1,11 @@
 package graphs.traversal;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class EventualSafeNodes802 {
     public static void main(String[] args) {
         int[][] graph = {{1,2},{2,3},{5},{0},{5},{},{}};
-        System.out.println(eventualSafeNodes(graph));
+        System.out.println(eventualSafeNodes1(graph));
     }
 
 //    dfs; time: O(m + n), space: O(n)
@@ -44,6 +43,50 @@ public class EventualSafeNodes802 {
 //        release from stack once branch traversed fully
         inStack[node] = false;
         return false;
+    }
+
+//    topological sort(kahn's algo); time: O(m + n), space: O(n) (m - nodes, n - edges)
+//    terminal nodes and those that lead to terminal...in order to traverse such nodes we reverse the edge direction(make it in-degree instead)
+//    and use kahn's algo(for directed acyclic graph). this will also detect cycles, as that will not be traversed.
+    public static List<Integer> eventualSafeNodes1(int[][] graph) {
+        int n = graph.length;
+        int[] inDegree = new int[n];
+        List<List<Integer>> adj = new ArrayList<>();
+        for(int i = 0 ; i < n ; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for(int i = 0 ; i < n ; i++) {
+            for(int node : graph[i]) {
+                adj.get(node).add(i);
+                inDegree[i]++;
+            }
+        }
+        Deque<Integer> queue = new ArrayDeque<>();
+        for(int i = 0 ; i < n ; i++) {
+            if(inDegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        boolean[] safe = new boolean[n];
+        while(!queue.isEmpty()) {
+            int node = queue.poll();
+            safe[node] = true;
+            for(int neighbour : adj.get(node)) {
+                inDegree[neighbour]--;
+                if(inDegree[neighbour] == 0) {
+                    queue.offer(neighbour);
+                }
+            }
+        }
+
+        List<Integer> safeNodes = new ArrayList<>();
+        for(int i = 0 ; i < n ; i++) {
+            if(safe[i]) {
+                safeNodes.add(i);
+            }
+        }
+
+        return safeNodes;
     }
 }
 
