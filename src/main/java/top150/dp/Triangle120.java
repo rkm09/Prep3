@@ -15,8 +15,8 @@ public class Triangle120 {
         System.out.println(minimumTotal(triangle));
     }
 
-//    [def]; recursion + memo; time: O(n), space: O(n)
-    public static int minimumTotal(List<List<Integer>> triangle) {
+    //    [def]; recursion + memo(top down dp); time: O(n^2), space: O(n^2) ; fast
+    public static int minimumTotalN(List<List<Integer>> triangle) {
         memo = new Integer[triangle.size()][triangle.size()];
         return dfs(triangle, 0, 0);
     }
@@ -32,6 +32,36 @@ public class Triangle120 {
         memo[level][index] = ans;
         return ans;
     }
+
+
+//    bottom up dp; time: O(n^2), space: O(1) [overwriting input]
+//    in-place (if allowed)
+    public static int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        for(int row = n - 2 ; row >= 0 ; row--) {
+            for(int col = 0 ; col <= row ; col++) {
+                int bestBelow = Math.min(triangle.get(row + 1).get(col), triangle.get(row + 1).get(col + 1));
+                triangle.get(row).set(col, bestBelow + triangle.get(row).get(col));
+            }
+        }
+        return triangle.get(0).get(0);
+    }
+
+//    bottom up dp with auxiliary space; time: O(n^2), space: O(n)
+    public static int minimumTotal1(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        List<Integer> rowBelow = triangle.get(n - 1);
+        for(int row = n - 2 ; row >= 0 ; row--) {
+            List<Integer> currRow = new ArrayList<>();
+            for(int col = 0 ; col <= row ; col++) {
+                int bestBelow = Math.min(rowBelow.get(col), rowBelow.get(col + 1));
+                currRow.add(bestBelow + triangle.get(row).get(col));
+            }
+            rowBelow = currRow;
+        }
+        return rowBelow.get(0);
+    }
+
 }
 
 /*
