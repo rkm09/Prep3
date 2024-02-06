@@ -10,17 +10,19 @@ public class LongestConSeq128 {
         System.out.println(longestConsecutive(nums));
     }
 
-//    time: O(nlogn), space: O(1) [if in place sorting allowed, else O(logn)]
-    public static int longestConsecutive(int[] nums) {
+    //    time: O(nlogn), space: O(1) [if in place sorting allowed, else O(logn)]
+    public static int longestConsecutive1(int[] nums) {
         int n = nums.length;
         if(n == 0) return 0;
+
         Arrays.sort(nums);
 
         int longestStreak = 1;
         int currentStreak = 1;
         for(int i = 1 ; i < n ; i++) {
+//            duplicates ignored
             if (nums[i] != nums[i - 1]) {
-                if (nums[i] == nums[i - 1] + 1) {
+                if (nums[i] == nums[i - 1]+1) {
                     currentStreak++;
                 } else {
                     longestStreak = Math.max(longestStreak, currentStreak);
@@ -31,6 +33,32 @@ public class LongestConSeq128 {
         return Math.max(longestStreak, currentStreak);
 
     }
+
+//    hashset; time: O(n), space: O(n) [though double loop makes it appear to have a time complexity of O(n^2), yet that
+//    does not happen as we run the while loop only when there is a beginning; all numbers only scanned once]
+//    ps: this approach turns out to be slower
+    public static int longestConsecutive(int[] nums) {
+        if(nums.length == 0) return 0;
+        Set<Integer> set = new HashSet<>();
+        for(int num : nums)
+            set.add(num);
+        int longestStreak = 1;
+        int currentStreak = 1;
+        for(int num : set) {
+            if(!set.contains(num - 1)) {
+                int currentNum = num;
+                currentStreak = 1;
+                while(set.contains(currentNum + 1)) {
+                     currentStreak++;
+                     currentNum++;
+                }
+                longestStreak = Math.max(longestStreak, currentStreak);
+            }
+        }
+        return longestStreak;
+    }
+
+
 
 }
 
