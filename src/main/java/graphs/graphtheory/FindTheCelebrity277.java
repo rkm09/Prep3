@@ -1,10 +1,44 @@
 package graphs.graphtheory;
 
-public class FindTheCelebrity277 {
+import common.Pair;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class FindTheCelebrity277 extends Relation{
+    private static int numberOfPeople;
+    private static Map<Pair<Integer, Integer>, Boolean> cache = new HashMap<>();
     public static void main(String[] args) {
-        System.out.println(findCelebrity(2));
+        FindTheCelebrity277 find = new FindTheCelebrity277();
+        System.out.println(find.findCelebrity(2));
     }
-    public static int findCelebrity(int n) {
+
+//    logical deduction; time: O(n), space: O(n)
+    public int findCelebrity(int n) {
+       numberOfPeople = n;
+       int celebrityCandidate = 0;
+       for(int i = 1 ; i < n ; i++) {
+           if(knows(celebrityCandidate, i)) {
+               celebrityCandidate = i;
+           }
+       }
+       if(isCelebrity(celebrityCandidate)) {
+           return celebrityCandidate;
+       }
+       return -1;
+    }
+    private boolean isCelebrity(int i) {
+        for(int j = 0 ; j < numberOfPeople ; j++) {
+            if(i == j) continue;
+            if(knows(i,j) || !knows(j,i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+//    [def] brute force; time: O(n^2), space: O(1)
+    public int findCelebrity2(int n) {
         int[] scores = new int[n + 1];
         for(int i = 0 ; i < n ; i++) {
             for(int j = 0 ; j < n ; j++) {
@@ -21,7 +55,17 @@ public class FindTheCelebrity277 {
         }
         return -1;
     }
-    private static boolean knows(int a, int b) {
+
+    @Override
+    public boolean knows(int a, int b) {
+        if(!cache.containsKey(new Pair<>(a, b))) {
+            cache.put(new Pair<>(a, b), super.knows(a, b));
+        }
+        return cache.get(new Pair<>(a,b));
+    }
+}
+class Relation {
+    public boolean knows(int a, int b) {
         int[][] graph = {{1,1,0},{0,1,0},{1,1,1}};
         return graph[a][b] == 1;
     }
