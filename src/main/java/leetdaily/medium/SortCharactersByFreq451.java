@@ -5,9 +5,28 @@ import java.util.*;
 public class SortCharactersByFreq451 {
     public static void main(String[] args) {
         String s = "tree";
-        System.out.println(frequencySort(s));
+        System.out.println(frequencySort1(s));
     }
-    public static String frequencySort(String s) {
+
+//    hashmap & sorting [an alternative to def]; time: O(nlogn), space: O(n); fast
+    public static String frequencySort1(String s) {
+        Map<Character, Integer> counts = new HashMap<>();
+        for(char c : s.toCharArray()) {
+            counts.put(c, counts.getOrDefault(c, 0) + 1);
+        }
+        List<Character> charList = new ArrayList<>(counts.keySet());
+        Collections.sort(charList, (a,b)-> counts.get(b) - counts.get(a));
+        StringBuilder sb = new StringBuilder();
+        for(char c : charList) {
+           int copies = counts.get(c);
+           for(int i = 0 ; i < copies ; i++)
+               sb.append(c);
+        }
+        return sb.toString();
+    }
+
+//    [def]; hashmap & sorting; time: O(nlogn), space: O(n)
+    public static String frequencySortN(String s) {
         Map<Character, Integer> count = new HashMap<>();
         for(char c : s.toCharArray()) {
             count.put(c, count.getOrDefault(c, 0) + 1);
@@ -21,6 +40,32 @@ public class SortCharactersByFreq451 {
             int i = 0;
             while(i++ < cnt) {
                 sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    //    bucket sort; time: O(n), space: O(n)
+    public static String frequencySort(String s) {
+        Map<Character, Integer> counts = new HashMap<>();
+        for(char c : s.toCharArray()) {
+            counts.put(c, counts.getOrDefault(c, 0) + 1);
+        }
+//        make the list of buckets and apply bucket sort
+        int maxFrequency = Collections.max(counts.values());
+        List<List<Character>> buckets = new ArrayList<>();
+        for(int i = 0 ; i <= maxFrequency ; i++) {
+            buckets.add(new ArrayList<>());
+        }
+        for(Character key : counts.keySet()) {
+            int freq = counts.get(key);
+            buckets.get(freq).add(key);
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i = buckets.size() - 1; i >= 1 ; i--) {
+            for(Character c : buckets.get(i)) {
+                for(int j = 0 ; j < i ; j++)
+                    sb.append(c);
             }
         }
         return sb.toString();
