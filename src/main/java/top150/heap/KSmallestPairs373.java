@@ -1,8 +1,8 @@
 package top150.heap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
+import common.Pair;
+
+import java.util.*;
 
 
 public class KSmallestPairs373 {
@@ -14,19 +14,35 @@ public class KSmallestPairs373 {
             System.out.println(li);
         }
     }
+
+//    using heaps; time: O(min(klogk, m.nlog(m.n))), space: O(min(k, m.n))
+//    heap is a useful data structure when it is required to repeatedly remove objects of the lowest(or highest priority)
+//    or when insertions have to be interspersed with removals;
     public static List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        for(int num : nums1)
-            pq.add(num);
-        for(int num : nums2)
-            pq.add(num);
-        List<List<Integer>> result = new ArrayList<>();
-        for(int i = 0 ; i < k ; i++) {
-            List<Integer> pair = new ArrayList<>();
-            int elem = pq.remove();
-            result.add(pair);
+        int m = nums1.length;
+        int n = nums2.length;
+        List<List<Integer>> ans = new ArrayList<>();
+        Set<Pair<Integer, Integer>> visited = new HashSet<>();
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a,b)-> a[0] - b[0]);
+        minHeap.offer(new int[]{nums1[0] + nums2[0], 0, 0});
+        visited.add(new Pair<>(0,0));
+        while(k-- > 0 && !minHeap.isEmpty()) {
+            int[] top = minHeap.poll();
+            int i = top[1];
+            int j = top[2];
+
+            ans.add(List.of(nums1[i], nums2[j]));
+
+            if(i + 1 < m && !visited.contains(new Pair<>(i + 1, j))) {
+                minHeap.offer(new int[]{nums1[i+1] + nums2[j], i + 1, j});
+                visited.add(new Pair<>(i + 1, j));
+            }
+            if(j + 1 < n && !visited.contains(new Pair<>(i, j + 1))) {
+                minHeap.offer(new int[]{nums1[i] + nums2[j + 1], i, j + 1});
+                visited.add(new Pair<>(i, j + 1));
+            }
         }
-        return result;
+        return ans;
     }
 }
 
