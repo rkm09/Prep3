@@ -15,7 +15,7 @@ public class Triangle120 {
         System.out.println(minimumTotal(triangle));
     }
 
-    //    [def]; recursion + memo(top down dp); time: O(n^2), space: O(n^2) ; fast
+    //    [def]; recursion + memo(top down dp); time: O(n^2), space: O(n^2) ; fastest
     public static int minimumTotalN(List<List<Integer>> triangle) {
         memo = new Integer[triangle.size()][triangle.size()];
         return dfs(triangle, 0, 0);
