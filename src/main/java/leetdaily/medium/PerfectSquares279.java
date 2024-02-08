@@ -14,7 +14,6 @@ public class PerfectSquares279 {
         Arrays.fill(dp, Integer.MAX_VALUE);
 //        bottom case
         dp[0] = 0;
-
 //        prefill squares
         int maxSquareIndex = (int) Math.sqrt(n) + 1;
         int[] squareNums = new int[maxSquareIndex];
