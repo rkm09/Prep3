@@ -9,6 +9,7 @@ public class Fibonacci509 {
     public static int fib1(int n) {
         if(n == 0) return 0;
         if(n == 1) return 1;
+//        or simply if(n <= 1) return n;
         int[] dp = new int[n + 1];
         dp[0] = 0;
         dp[1] = 1;
