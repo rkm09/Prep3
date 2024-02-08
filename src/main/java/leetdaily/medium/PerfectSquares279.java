@@ -1,18 +1,21 @@
 package leetdaily.medium;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class PerfectSquares279 {
+    private static Set<Integer> squareNums;
     public static void main(String[] args) {
-        System.out.println(numSquares(12));
+        System.out.println(numSquares1(5));
     }
 
 //    dp (knapsack); time: O(n.sqrt(n)), space: O(n)
     public static int numSquares(int n) {
         int[] dp = new int[n + 1];
         Arrays.fill(dp, Integer.MAX_VALUE);
+//        bottom case
         dp[0] = 0;
 
+//        prefill squares
         int maxSquareIndex = (int) Math.sqrt(n) + 1;
         int[] squareNums = new int[maxSquareIndex];
         for(int i = 1 ; i < maxSquareIndex ; i++) {
@@ -26,6 +29,55 @@ public class PerfectSquares279 {
             }
         }
         return dp[n];
+    }
+
+//    greedy enumeration; time: O(n^h/2), space: O(sqrt(n)) [h-maximal number of recursion] (fastest)
+    public static int numSquares1(int n) {
+        squareNums = new HashSet<>();
+        for(int i = 1; i * i <= n ; i++)
+            squareNums.add(i*i);
+        int count = 1;
+        for( ; count <= n ; count++) {
+            if(isDividedBy(n, count)) {
+                return count;
+            }
+        }
+        return count;
+    }
+    private static boolean isDividedBy(int n, int count) {
+        if(count == 1)
+            return squareNums.contains(n);
+        for(Integer square : squareNums) {
+            if(isDividedBy(n - square, count - 1))
+                return true;
+        }
+        return false;
+    }
+
+//    bfs + greedy; time: O(n^h/2), space: O(sqrt(n)^h) [h - height of the n-ary tree]
+    public static int numSquares2(int n) {
+        List<Integer> squareNums = new ArrayList<>();
+        for(int i = 1 ; i * i <= n ; i++)
+            squareNums.add(i * i);
+//        set used instead of linked list for queue in order to eliminate redundant remainders
+        Set<Integer> queue = new HashSet<>();
+        queue.add(n);
+        int level = 0;
+        while(!queue.isEmpty()) {
+            level++;
+            Set<Integer> nextQueue = new HashSet<>();
+            for(Integer remainder : queue) {
+                for(Integer square : squareNums) {
+                    if(remainder.equals(square))
+                        return level;
+                    if(remainder < square)
+                        break;
+                    nextQueue.add(remainder - square);
+                }
+            }
+            queue = nextQueue;
+        }
+        return level;
     }
 }
 
