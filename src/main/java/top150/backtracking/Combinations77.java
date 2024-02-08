@@ -4,23 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Combinations77 {
+    private static List<List<Integer>> results;
     public static void main(String[] args) {
         List<List<Integer>> li = combine(4,2);
         for(List<Integer> l : li) {
             System.out.println(l);
         }
     }
-    public static List<List<Integer>> combine(int n, int k) {
-        List<List<Integer>> res = new ArrayList<>();
-        for(int i = 1 ; i <= n ; i++) {
-            for(int j = i + 1 ; j <= k ; j++) {
-                res.add(new ArrayList<>(List.of(i, j)));
-            }
-        }
-        return res;
-    }
-    private static void backtrack() {
 
+//   [def]; backtracking; time: O(), space: O(n)
+    public static List<List<Integer>> combine(int n, int k) {
+        results = new ArrayList<>();
+        backtrack(n, k, new ArrayList<>(), 1);
+        return results;
+    }
+    private static void backtrack(int n, int k, List<Integer> curr, int start) {
+        if(curr.size() == k) {
+            results.add(new ArrayList<>(curr));
+            return;
+        }
+        for(int i = start; i <= n ; i++) {
+            curr.add(i);
+            backtrack(n, k, curr, i + 1);
+            curr.remove(curr.size() - 1);
+        }
     }
 }
 /*
