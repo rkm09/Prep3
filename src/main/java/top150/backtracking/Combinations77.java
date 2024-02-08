@@ -12,7 +12,7 @@ public class Combinations77 {
         }
     }
 
-//   [def]; backtracking; time: O(), space: O(n)
+    //   [def]; backtracking with optimization; time: O(n!/(n-k)!(k-1)!), space: O(n); faster [k leaves]
     public static List<List<Integer>> combine(int n, int k) {
         results = new ArrayList<>();
         backtrack(n, k, new ArrayList<>(), 1);
@@ -23,12 +23,35 @@ public class Combinations77 {
             results.add(new ArrayList<>(curr));
             return;
         }
-        for(int i = start; i <= n ; i++) {
+        int need = k - curr.size();
+        int remain = n - start + 1;
+        int available = remain - need;
+        for(int i = start; i <= start + available ; i++) {
             curr.add(i);
             backtrack(n, k, curr, i + 1);
             curr.remove(curr.size() - 1);
         }
     }
+
+//   [def]; backtracking; time: O(n!/(n-k)!k!), space: O(n)
+    public static List<List<Integer>> combine1(int n, int k) {
+        results = new ArrayList<>();
+        backtrack1(n, k, new ArrayList<>(), 1);
+        return results;
+    }
+    private static void backtrack1(int n, int k, List<Integer> curr, int start) {
+        if(curr.size() == k) {
+            results.add(new ArrayList<>(curr));
+            return;
+        }
+        for(int i = start; i <= n ; i++) {
+            curr.add(i);
+            backtrack1(n, k, curr, i + 1);
+            curr.remove(curr.size() - 1);
+        }
+    }
+
+
 }
 /*
 Given two integers n and k, return all possible combinations of k numbers chosen from the range [1, n].
