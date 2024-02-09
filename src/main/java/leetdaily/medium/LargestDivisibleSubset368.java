@@ -1,10 +1,9 @@
 package leetdaily.medium;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class LargestDivisibleSubset368 {
+    private static Map<Integer, List<Integer>> edsMemo;
     public static void main(String[] args) {
         int[] nums = {1,2,4,7,8};
         System.out.println(largestDivisibleSubset(nums));
@@ -32,6 +31,41 @@ public class LargestDivisibleSubset368 {
                 res = eds.get(i);
         }
         return res;
+    }
+
+//  recursion with memoization; time: O(n^2), space: O(n^2)
+    public static List<Integer> largestDivisibleSubset1(int[] nums) {
+        int n = nums.length;
+        if(n == 0) return new ArrayList<>();
+        edsMemo = new HashMap<>();
+        Arrays.sort(nums);
+        List<Integer> res = new ArrayList<>();
+        for(int i = 0 ; i < n ; i++) {
+            List<Integer> maxSubSet = eds(nums, i);
+            if(res.size() < maxSubSet.size())
+                res = maxSubSet;
+        }
+        return res;
+    }
+    private static List<Integer> eds(int[] nums, int i) {
+//        memoization
+        if(edsMemo.containsKey(i))
+            return edsMemo.get(i);
+
+        List<Integer> maxSubSet = new ArrayList<>();
+        for(int k = 0 ; k < i ; k++) {
+            if(nums[i] % nums[k] == 0) {
+                List<Integer> subList = eds(nums, k);
+                if(maxSubSet.size() < subList.size())
+                    maxSubSet = subList;
+            }
+        }
+        List<Integer> newEntry = new ArrayList<>();
+        newEntry.addAll(maxSubSet);
+        newEntry.add(nums[i]);
+
+        edsMemo.put(i, newEntry);
+        return newEntry;
     }
 }
 
