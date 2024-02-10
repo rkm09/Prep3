@@ -1,12 +1,26 @@
 package leetdaily.medium;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PaintFence276 {
+    private static Map<Integer, Integer> memo;
     public static void main(String[] args) {
         System.out.println(numWays(3,2));
     }
+
+//    top down dp; time: O(n), space: O(n)
     public static int numWays(int n, int k) {
-        int[][] dp = new int[n][k];
-        return 0;
+        memo = new HashMap<>();
+        return totalWays(n, k);
+    }
+    private static int totalWays(int i, int k) {
+        if(i == 1) return k;
+        if(i == 2) return k * k;
+        if(memo.containsKey(i))
+            return memo.get(i);
+        memo.put(i, (k - 1) * (totalWays(i - 1, k) + totalWays(i - 2, k)));
+        return memo.get(i);
     }
 }
 
