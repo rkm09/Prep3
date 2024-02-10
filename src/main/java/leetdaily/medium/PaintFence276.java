@@ -9,8 +9,21 @@ public class PaintFence276 {
         System.out.println(numWays(3,2));
     }
 
-//    bottom up dp; time: O(n), space: O(n)
+//    bottom up dp; time: O(n), space: O(1)
     public static int numWays(int n, int k) {
+        if(n == 1) return k;
+        int twoPostsBack = k;
+        int onePostBack = k * k;
+        for(int i = 3; i <= n ; i++) {
+            int curr = (k - 1) * (onePostBack + twoPostsBack);
+            twoPostsBack = onePostBack;
+            onePostBack = curr;
+        }
+        return onePostBack;
+    }
+
+//    bottom up dp; time: O(n), space: O(n)
+    public static int numWays1(int n, int k) {
         if(n == 1) return k;
         if(n == 2) return k * k;
         int[] dp = new int[n + 1];
@@ -23,7 +36,7 @@ public class PaintFence276 {
     }
 
 //    top down dp; time: O(n), space: O(n)
-    public static int numWays1(int n, int k) {
+    public static int numWays2(int n, int k) {
         memo = new HashMap<>();
         return totalWays(n, k);
     }
