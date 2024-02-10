@@ -22,7 +22,7 @@ public class PaintFence276 {
         return onePostBack;
     }
 
-//    bottom up dp; time: O(n), space: O(n)
+//    bottom up dp; time: O(n), space: O(n) ; fastest
     public static int numWays1(int n, int k) {
         if(n == 1) return k;
         if(n == 2) return k * k;
