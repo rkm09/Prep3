@@ -6,8 +6,29 @@ public class MinimumPathSum64 {
         System.out.println(minPathSum1(grid));
     }
 
-//    bottom up 1d dp; time: O(m.n), space: O(n) [can also do O(1) space if input is allowed to be modified]
+    //    bottom up 2d dp; time: O(m.n), space: O(m.n)
     public static int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dp = new int[m][n];
+        for(int i = m - 1 ; i >= 0 ; i--) {
+            for(int j = n - 1 ; j >= 0 ; j--) {
+                if(i == m - 1 && j != n - 1) {
+                    dp[i][j] = grid[i][j] + dp[i][j + 1];
+                } else if(i != m - 1 && j == n - 1) {
+                    dp[i][j] = grid[i][j] + dp[i + 1][j];
+                } else if(i != m - 1 && j != n - 1) {
+                    dp[i][j] = grid[i][j] + Math.min(dp[i + 1][j], dp[i][j + 1]);
+                } else {
+                    dp[i][j] = grid[i][j];
+                }
+            }
+        }
+        return dp[0][0];
+    }
+
+//    bottom up 1d dp; time: O(m.n), space: O(n) [can also do O(1) space if input is allowed to be modified]
+    public static int minPathSum1(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
         int[] dp = new int[n];
@@ -27,25 +48,22 @@ public class MinimumPathSum64 {
         return dp[0];
     }
 
-//    bottom up 2d dp; time: O(m.n), space: O(m.n)
-    public static int minPathSum1(int[][] grid) {
+//    bottom up dp; time: O(m.n), space: O(1) (in place)
+    public static int minPathSum3(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        int[][] dp = new int[m][n];
         for(int i = m - 1 ; i >= 0 ; i--) {
             for(int j = n - 1 ; j >= 0 ; j--) {
                 if(i == m - 1 && j != n - 1) {
-                    dp[i][j] = grid[i][j] + dp[i][j + 1];
+                    grid[i][j] = grid[i][j] + grid[i][j + 1];
                 } else if(i != m - 1 && j == n - 1) {
-                    dp[i][j] = grid[i][j] + dp[i + 1][j];
+                    grid[i][j] = grid[i][j] + grid[i + 1][j];
                 } else if(i != m - 1 && j != n - 1) {
-                    dp[i][j] = grid[i][j] + Math.min(dp[i + 1][j], dp[i][j + 1]);
-                } else {
-                    dp[i][j] = grid[i][j];
+                    grid[i][j] = grid[i][j] + Math.min(grid[i + 1][j], grid[i][j + 1]);
                 }
             }
         }
-        return dp[0][0];
+        return grid[0][0];
     }
 
 //    [TLE]; brute force recursion; time: O(2^(m+n)), space: O(m+n)
