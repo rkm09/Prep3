@@ -10,8 +10,25 @@ public class RearrangeArrayElements2149 {
         System.out.println(Arrays.toString(rearrangeArray(nums)));
     }
 
-//    def;
+//    2 pointer; time : O(n), space: O(1)
     public static int[] rearrangeArray(int[] nums) {
+        int n = nums.length;
+        int[] res = new int[n];
+        int even = 0, odd = 1;
+        for(int num : nums) {
+            if(num > 0) {
+                res[even] = num;
+                even += 2;
+            } else if(num < 0){
+                res[odd] = num;
+                odd += 2;
+            }
+        }
+        return res;
+    }
+
+//    def; time: O(n), space: O(n)
+    public static int[] rearrangeArray1(int[] nums) {
         int n = nums.length;
         List<Integer> even = new ArrayList<>();
         List<Integer> odd = new ArrayList<>();
