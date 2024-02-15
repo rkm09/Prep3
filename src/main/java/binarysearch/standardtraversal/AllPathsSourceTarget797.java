@@ -5,14 +5,15 @@ import java.util.*;
 public class AllPathsSourceTarget797 {
     private  List<List<Integer>> results = new ArrayList<>();
     private int[][] graph;
+    private Map<Integer, List<List<Integer>>> memo;
     private int target;
-    public  void main(String[] args) {
+    public static void main(String[] args) {
         AllPathsSourceTarget797 all = new AllPathsSourceTarget797();
         int[][] graph = {{1,2},{3},{3},{}};
-        System.out.println(all.allPathsSourceTarget(graph));
+        System.out.println(all.allPathsSourceTarget1(graph));
     }
 
-//    backtrack; time: O(n.2^n), space: O(n)
+//    backtrack; time: O(n.2^n), space: O(n) [optimal & fast]
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         target = graph.length - 1;
         this.graph = graph;
@@ -23,6 +24,7 @@ public class AllPathsSourceTarget797 {
     }
     private void backtrack(Deque<Integer> path, int currNode) {
         if(currNode == target) {
+//            make a deep copy
             results.add(new ArrayList<>(path));
             return;
         }
@@ -31,6 +33,35 @@ public class AllPathsSourceTarget797 {
             backtrack(path, nextNode);
             path.removeLast();
         }
+    }
+
+    //    top down dp; time: O(n.2^n), space: O(n)
+    public List<List<Integer>> allPathsSourceTarget1(int[][] graph) {
+        target = graph.length - 1;
+        this.graph = graph;
+        memo = new HashMap<>();
+        return allPathsToTarget(0);
+    }
+    private List<List<Integer>> allPathsToTarget(int currNode) {
+        if(memo.containsKey(currNode))
+            return memo.get(currNode);
+        List<List<Integer>> results = new ArrayList<>();
+        if(currNode == target) {
+            List<Integer> path = new ArrayList<>();
+            path.add(target);
+            results.add(path);
+            return results;
+        }
+        for(int nextNode : graph[currNode]) {
+            for(List<Integer> paths : allPathsToTarget(nextNode)) {
+                List<Integer> newPath = new ArrayList<>();
+                newPath.add(currNode);
+                newPath.addAll(paths);
+                results.add(newPath);
+            }
+        }
+        memo.put(currNode, results);
+        return results;
     }
 }
 
