@@ -17,12 +17,12 @@ public class AllPathsSourceTarget797 {
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         target = graph.length - 1;
         this.graph = graph;
-        Deque<Integer> path = new ArrayDeque<>();
+        LinkedList<Integer> path = new LinkedList<>();
         path.addLast(0);
         backtrack(path, 0);
         return results;
     }
-    private void backtrack(Deque<Integer> path, int currNode) {
+    private void backtrack(LinkedList<Integer> path, int currNode) {
         if(currNode == target) {
 //            make a deep copy
             results.add(new ArrayList<>(path));
