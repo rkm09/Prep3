@@ -1,11 +1,10 @@
 package binarysearch.standardtraversal;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class AllPathsSourceTarget797 {
     private  List<List<Integer>> results = new ArrayList<>();
+    private int[][] graph;
     private int target;
     public  void main(String[] args) {
         AllPathsSourceTarget797 all = new AllPathsSourceTarget797();
@@ -14,21 +13,22 @@ public class AllPathsSourceTarget797 {
     }
 
 //    backtrack; time: O(n.2^n), space: O(n)
-    public  List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         target = graph.length - 1;
-        LinkedList<Integer> path = new LinkedList<>();
+        this.graph = graph;
+        Deque<Integer> path = new ArrayDeque<>();
         path.addLast(0);
-        backtrack(graph, path, 0);
+        backtrack(path, 0);
         return results;
     }
-    private  void backtrack(int[][] graph, LinkedList<Integer> path, int currNode) {
+    private void backtrack(Deque<Integer> path, int currNode) {
         if(currNode == target) {
             results.add(new ArrayList<>(path));
             return;
         }
         for(int nextNode : graph[currNode]) {
             path.addLast(nextNode);
-            backtrack(graph, path, nextNode);
+            backtrack(path, nextNode);
             path.removeLast();
         }
     }
