@@ -5,29 +5,30 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AllPathsSourceTarget797 {
-    private static List<List<Integer>> results = new ArrayList<>();
-    private static int target;
-    public static void main(String[] args) {
+    private  List<List<Integer>> results = new ArrayList<>();
+    private int target;
+    public  void main(String[] args) {
+        AllPathsSourceTarget797 all = new AllPathsSourceTarget797();
         int[][] graph = {{1,2},{3},{3},{}};
-        System.out.println(allPathsSourceTarget(graph));
+        System.out.println(all.allPathsSourceTarget(graph));
     }
 
 //    backtrack; time: O(n.2^n), space: O(n)
-    public static List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+    public  List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         target = graph.length - 1;
         LinkedList<Integer> path = new LinkedList<>();
         path.addLast(0);
         backtrack(graph, path, 0);
         return results;
     }
-    private static void backtrack(int[][] graph, LinkedList<Integer> path, int currNode) {
+    private  void backtrack(int[][] graph, LinkedList<Integer> path, int currNode) {
         if(currNode == target) {
             results.add(new ArrayList<>(path));
             return;
         }
-        for(int next : graph[currNode]) {
-            path.addLast(next);
-            backtrack(graph, path, next);
+        for(int nextNode : graph[currNode]) {
+            path.addLast(nextNode);
+            backtrack(graph, path, nextNode);
             path.removeLast();
         }
     }
