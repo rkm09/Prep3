@@ -11,7 +11,7 @@ public class PolygonPerimeter2971 {
 //    sorting; time: nlogn, space: O(logn)
     public static long largestPerimeter(int[] nums) {
         Arrays.sort(nums);
-        int ans = -1, previousElementSum = 0;
+        long ans = -1, previousElementSum = 0;
         for(int num : nums) {
             if(num < previousElementSum) {
                 ans = num + previousElementSum;
