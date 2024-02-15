@@ -1,4 +1,4 @@
-package binarysearch.standardsearch;
+package binarysearch.standardtraversal;
 
 public class BadVersion278 {
     public static void main(String[] args) {

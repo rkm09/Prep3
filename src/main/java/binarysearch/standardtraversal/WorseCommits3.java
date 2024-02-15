@@ -1,4 +1,4 @@
-package binarysearch.standardsearch;
+package binarysearch.standardtraversal;
 
 
 import java.util.ArrayList;
