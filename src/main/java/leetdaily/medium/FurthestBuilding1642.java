@@ -1,6 +1,7 @@
 package leetdaily.medium;
 
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class FurthestBuilding1642 {
     public static void main(String[] args) {
@@ -11,13 +12,15 @@ public class FurthestBuilding1642 {
         System.out.println(furthestBuilding(heights, 5, 1));
     }
 
-//  min heap; time: O(nlogn), space: O(n)
+//  min heap (allocate minimum diff for bricks); time: O(nlogn), space: O(n)
     public static int furthestBuilding(int[] heights, int bricks, int ladders) {
-        PriorityQueue<Integer> ladderAllocations = new PriorityQueue<>();
+        Queue<Integer> ladderAllocations = new PriorityQueue<>();
         for(int i = 0 ; i < heights.length - 1 ; i++) {
             int climb = heights[i + 1] - heights[i];
+//            jump down
             if(climb <= 0)
                 continue;
+//            else, allocate ladder
             ladderAllocations.add(climb);
             if(ladderAllocations.size() <= ladders) {
                 continue;
@@ -25,6 +28,28 @@ public class FurthestBuilding1642 {
             bricks -= ladderAllocations.remove();
             if(bricks < 0)
                 return i;
+        }
+        return heights.length - 1;
+    }
+
+    //  max heap (allocate maximum diff for ladders); time: O(nlogn), space: O(n)
+    public static int furthestBuilding1(int[] heights, int bricks, int ladders) {
+        Queue<Integer> brickAllocations = new PriorityQueue<>((a, b) -> b - a);
+        for(int i = 0 ; i < heights.length ; i++) {
+            int climb = heights[i + 1] - heights[i];
+//            jump down
+            if(climb <= 0)
+                continue;
+//            else allocate bricks
+            brickAllocations.add(climb);
+            bricks -= climb;
+//            no more bricks or ladders left
+            if(bricks < 0 && ladders == 0)
+                return i;
+            if(bricks < 0) {
+                bricks += brickAllocations.remove();
+                ladders--;
+            }
         }
         return heights.length - 1;
     }
