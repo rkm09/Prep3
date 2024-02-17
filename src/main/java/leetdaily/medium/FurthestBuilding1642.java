@@ -1,7 +1,5 @@
 package leetdaily.medium;
 
-import common.Pair;
-
 import java.util.*;
 
 public class FurthestBuilding1642 {
