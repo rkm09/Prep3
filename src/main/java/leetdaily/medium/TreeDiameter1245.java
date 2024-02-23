@@ -91,7 +91,7 @@ public class TreeDiameter1245 {
             return layers * 2 + 1;
     }
 
-//    dfs; time: O(n), space: O(n) [fastest]
+//    dfs (representing as a tree, counting distance from root to leaf); time: O(n), space: O(n) [fastest]
     public int treeDiameter2(int[][] edges) {
         graph = new ArrayList<>();
         for(int i = 0 ; i < edges.length + 1; i++)
