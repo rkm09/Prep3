@@ -1,51 +1,101 @@
 package graphs.dijikstra;
 
-import common.Pair;
-
 import java.util.*;
 
 public class CheapestFlightsKStops787 {
     public static void main(String[] args) {
-        int[][] flights = {{0,1,100},{1,2,100},{2,0,100},{1,3,600},{2,3,200}};
-        System.out.println(findCheapestPrice(4, flights, 0, 3, 1));
+        int[][] flights = {{0,1,100},{1,2,100},{0,2,500}};
+        System.out.println(findCheapestPrice2(3, flights, 0, 2, 1));
     }
 
 //    bfs; time: O(N + E.K), space: O(N + E.K) [E: number of flights, N: number of cities]
     public static int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
-        Map<Integer, List<Pair<Integer, Integer>>> adjMap = new HashMap<>();
+        Map<Integer, List<int[]>> adjMap = new HashMap<>();
         for(int[] flight : flights)
-            adjMap.computeIfAbsent(flight[0], value -> new ArrayList<>()).add(new Pair<>(flight[1], flight[2]));
+            adjMap.computeIfAbsent(flight[0], value -> new ArrayList<>()).add(new int[]{flight[1], flight[2]});
 
         int[] distances = new int[n];
         Arrays.fill(distances, Integer.MAX_VALUE);
 
-        Deque<Pair<Integer,Integer>> queue = new ArrayDeque<>();
-        queue.offer(new Pair<>(src, 0));
+        Deque<int[]> queue = new ArrayDeque<>();
+        queue.offer(new int[]{src, 0});
         int stops = 0;
 
         while(stops <= k && !queue.isEmpty()) {
             int size = queue.size();
 //            Iterate on current level
             while(size-- > 0) {
-                Pair<Integer, Integer> pair = queue.poll();
-                int node = pair.getKey();
-                int distance = pair.getValue();
+                int[] nodeInfo = queue.poll();
+                int node = nodeInfo[0];
+                int nodePrice = nodeInfo[1];
                 if(!adjMap.containsKey(node))
                     continue;
 //                loop over neighbours of popped node
-                for(Pair<Integer, Integer> edge : adjMap.get(node)) {
-                    int neighbour = edge.getKey();
-                    int price = edge.getValue();
-                    if(distance + price >= distances[neighbour])
+                for(int[] neighbourInfo : adjMap.get(node)) {
+                    int neighbour = neighbourInfo[0];
+                    int neighbourPrice = neighbourInfo[1];
+                    if(nodePrice + neighbourPrice >= distances[neighbour])
                         continue;
-                    distances[neighbour] = price + distance;
-                    queue.offer(new Pair<>(neighbour, distances[neighbour]));
+                    distances[neighbour] = neighbourPrice + nodePrice;
+                    queue.offer(new int[]{neighbour, distances[neighbour]});
                 }
             }
             stops++;
         }
 
         return distances[dst] == Integer.MAX_VALUE ? -1 : distances[dst];
+    }
+
+//    bellman ford; time: O((N+E).K), space: O(N) [fastest]
+    public static int findCheapestPrice1(int n, int[][] flights, int src, int dst, int k) {
+        int[] distances = new int[n];
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        distances[src] = 0;
+
+        for(int i = 0 ; i <= k ; i++) {
+            int[] temp = Arrays.copyOf(distances, n);
+            for(int[] flight : flights) {
+                if(distances[flight[0]] != Integer.MAX_VALUE) {
+                    temp[flight[1]] = Math.min(temp[flight[1]], distances[flight[0]] + flight[2]);
+                }
+            }
+            distances = temp;
+        }
+
+        return distances[dst] == Integer.MAX_VALUE ? -1 : distances[dst];
+    }
+
+//    dijikstra's algo; time: O(N + E.KlogE.K), space: O(N + E.K)
+    public static int findCheapestPrice2(int n, int[][] flights, int src, int dst, int k) {
+        Map<Integer, List<int[]>> adjMap = new HashMap<>();
+        for(int[] flight : flights)
+            adjMap.computeIfAbsent(flight[0], value -> new ArrayList<>()).add(new int[] {flight[1], flight[2]});
+
+        int[] stops = new int[n];
+        Arrays.fill(stops, Integer.MAX_VALUE);
+
+//        {distanceFromSource, node, numberOfStopsFromSource}
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        pq.offer(new int[] {0, src, 0});
+
+        while(!pq.isEmpty()) {
+            int[] temp = pq.poll();
+            int distance = temp[0];
+            int node = temp[1];
+            int steps = temp[2];
+//          we have already encountered a path with lower cost & fewer steps or the number of stops exceeds the limit
+            if(steps > stops[node] || steps > k + 1)
+                continue;
+            stops[node] = steps;
+            if(node == dst)
+                return distance;
+            if(!adjMap.containsKey(node))
+                continue;
+            for(int[] nei : adjMap.get(node)) {
+                pq.offer(new int[]{nei[1] + distance, nei[0], steps + 1});
+            }
+        }
+        return -1;
     }
 }
 
