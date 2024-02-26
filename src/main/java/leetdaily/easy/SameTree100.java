@@ -25,38 +25,40 @@ public class SameTree100 {
                 isSameTree(p.right, q.right);
     }
 
-//    bfs iteration; time: O(n), space: O(n)
+//    bfs iteration; time: O(n), space: O(n) [fast & less space]
     public static boolean isSameTree1(TreeNode p, TreeNode q) {
         if(p == null && q == null) return true;
         if(!isValid(p, q)) return false;
-        Deque<TreeNode> queue1 = new ArrayDeque<>();
-        Deque<TreeNode> queue2 = new ArrayDeque<>();
-        queue1.offer(p);
-        queue2.offer(q);
-        while(!queue1.isEmpty()) {
-            TreeNode n1 = queue1.poll();
-            TreeNode n2 = queue2.poll();
-            if(!isValid(n1, n2)) return false;
-            if(n1 != null) {
+        Deque<TreeNode> deqP = new ArrayDeque<>();
+        Deque<TreeNode> deqQ = new ArrayDeque<>();
+        deqP.offer(p);
+        deqQ.offer(q);
+        while(!deqP.isEmpty()) {
+            p = deqP.poll();
+            q = deqQ.poll();
+            if(!isValid(p, q)) return false;
+            if(p != null) {
 //                nulls not allowed in deque
-                if(!isValid(n1.left, n2.left)) return false;
-                if(n1.left != null) {
-                    queue1.offer(n1.left);
-                    queue2.offer(n2.left);
+                if(!isValid(p.left, q.left)) return false;
+                if(p.left != null) {
+                    deqP.offer(p.left);
+                    deqQ.offer(q.left);
                 }
-                if(!isValid(n1.right, n2.right)) return false;
-                if(n1.right != null) {
-                    queue1.offer(n1.right);
-                    queue2.offer(n2.right);
+
+                if(!isValid(p.right, q.right)) return false;
+                if(p.right != null) {
+                    deqP.offer(p.right);
+                    deqQ.offer(q.right);
                 }
             }
         }
         return true;
     }
-    private static boolean isValid(TreeNode n1, TreeNode n2) {
-        if(n1 == null && n2 == null) return true;
-        if(n1 == null || n2 == null) return false;
-        if(n1.val != n2.val) return false;
+
+    private static boolean isValid(TreeNode p, TreeNode q) {
+        if(p == null && q == null) return true;
+        if(p == null || q == null) return false;
+        if(p.val != q.val) return false;
         return true;
     }
 }
