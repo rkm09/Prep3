@@ -5,7 +5,7 @@ import java.util.*;
 public class CheapestFlightsKStops787 {
     public static void main(String[] args) {
         int[][] flights = {{0,1,100},{1,2,100},{0,2,500}};
-        System.out.println(findCheapestPrice2(3, flights, 0, 2, 1));
+        System.out.println(findCheapestPrice1(3, flights, 0, 2, 1));
     }
 
 //    bfs; time: O(N + E.K), space: O(N + E.K) [E: number of flights, N: number of cities]
