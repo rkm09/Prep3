@@ -1,12 +1,75 @@
 package leetdaily.hard;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class LargestComponentSizeByFactor952 {
     public static void main(String[] args) {
         int[] nums = {4,6,15,35};
-        System.out.println(largestComponentSize(nums));
+        LargestComponentSizeByFactor952 comp  = new LargestComponentSizeByFactor952();
+        System.out.println(comp.largestComponentSize(nums));
     }
-    public static int largestComponentSize(int[] nums) {
-        return 0;
+
+//    union with factors; time: O(N.sqrt(M)logM), space: O(M+N) [M - max input value, N - nums length]
+    public  int largestComponentSize(int[] nums) {
+        int maxValue = Arrays.stream(nums).reduce(nums[0], Math::max);
+        UnionFind dsu = new UnionFind(maxValue);
+        for(int num : nums) {
+            for(int factor = 2 ; factor <= (int) Math.sqrt(num) ; factor++) {
+                if(num % factor == 0) {
+                    dsu.union(num, factor);
+//                    unite complementary pair as well
+                    dsu.union(num, num / factor);
+                }
+            }
+        }
+
+//        count group size and find max
+        int maxGroupSize = 0;
+        Map<Integer, Integer> groupCount = new HashMap<>();
+        for(int num : nums) {
+            int groupId = dsu.find(num);
+            int groupSize = groupCount.getOrDefault(groupId, 0);
+            groupCount.put(groupId, groupSize + 1);
+            maxGroupSize = Math.max(maxGroupSize, groupSize + 1);
+        }
+
+        return maxGroupSize;
+    }
+
+
+    class UnionFind {
+        private int[] parent;
+        private int[] rank;
+        UnionFind(int size) {
+            parent = new int[size + 1];
+            rank = new int[size + 1];
+            for(int i = 0 ; i < size + 1 ; i++) {
+                parent[i] = i;
+                rank[i] = i;
+            }
+        }
+        public int find(int x) {
+            if(parent[x] != x) {
+                parent[x] = find(parent[x]);
+            }
+            return parent[x];
+        }
+        public void union(int x, int y) {
+            int px = find(x);
+            int py = find(y);
+            if(px != py) {
+                if(rank[px] > rank[py]) {
+                    parent[py] = px;
+                } else if(rank[px] < rank[py]){
+                    parent[px] = py;
+                } else {
+                    parent[py] = px;
+                    rank[px]++;
+                }
+            }
+        }
     }
 }
 
