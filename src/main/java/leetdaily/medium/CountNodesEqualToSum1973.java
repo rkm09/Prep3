@@ -13,6 +13,8 @@ public class CountNodesEqualToSum1973 {
         TreeNode root = new TreeNode(10, left, right);
         System.out.println(cnt.equalToDescendants(root));
     }
+
+//    [def]; dfs postorder traversal; time: O(n), space: O(n)
     public int equalToDescendants(TreeNode root) {
         dfs(root);
         return count;
