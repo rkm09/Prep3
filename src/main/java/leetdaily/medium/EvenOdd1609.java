@@ -8,6 +8,7 @@ import java.util.Deque;
 import java.util.List;
 
 public class EvenOdd1609 {
+    private static List<Integer> prev;
     public static void main(String[] args) {
         TreeNode left11 = new TreeNode(3);
         TreeNode left12 = new TreeNode(3);
@@ -18,7 +19,7 @@ public class EvenOdd1609 {
         System.out.println(isEvenOddTree(root));
     }
 
-//    bfs; time: O(n), space: O(n)
+    //    bfs; time: O(n), space: O(n) [faster]
     public static boolean isEvenOddTree(TreeNode root) {
         Deque<TreeNode> queue = new ArrayDeque<>();
         queue.offer(root);
@@ -29,22 +30,43 @@ public class EvenOdd1609 {
             if(isEven)
                 prev = Integer.MIN_VALUE;
             while(size > 0) {
-                 TreeNode current = queue.poll();
-                 if((isEven && (current.val <= prev || current.val % 2 == 0)) ||
-                    !isEven && (current.val >= prev || current.val % 2 != 0))
-                     return false;
+                TreeNode current = queue.poll();
+                if((isEven && (current.val <= prev || current.val % 2 == 0)) ||
+                        !isEven && (current.val >= prev || current.val % 2 != 0))
+                    return false;
+                prev = current.val;
 
-                 prev = current.val;
-                 if(current.left != null)
-                     queue.offer(current.left);
-                 if(current.right != null)
-                     queue.offer(current.right);
-                 size--;
+                if(current.left != null)
+                    queue.offer(current.left);
+                if(current.right != null)
+                    queue.offer(current.right);
+
+                size--;
             }
             isEven = !isEven;
         }
         return true;
     }
+
+//    dfs; time: O(n), space: O(n)
+    public static boolean isEvenOddTree1(TreeNode root) {
+        prev = new ArrayList<>();
+        return dfs(root, 0);
+    }
+    private static boolean dfs(TreeNode current, int level) {
+        if(current == null) return true;
+        if(current.val % 2 == level % 2) return false;
+        if(prev.size() == level) prev.add(0);
+        if(prev.get(level) != 0 &&
+                ((level % 2 == 0 && current.val <= prev.get(level))
+                || (level % 2 != 0 && current.val >= prev.get(level)))) {
+            return false;
+        }
+        prev.set(level, current.val);
+        return dfs(current.left, level + 1) && dfs(current.right, level + 1);
+    }
+
+
 }
 
 /*
