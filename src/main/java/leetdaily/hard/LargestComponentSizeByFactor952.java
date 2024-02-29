@@ -12,6 +12,7 @@ public class LargestComponentSizeByFactor952 {
 //    union with factors; time: O(N.sqrt(M)logM), space: O(M+N) [M - max input value, N - nums length] [faster]
     public  int largestComponentSize(int[] nums) {
         int maxValue = Arrays.stream(nums).reduce(nums[0], Math::max);
+//        or Arrays.stream(nums).max().getAsInt();
         UnionFind dsu = new UnionFind(maxValue);
         for(int num : nums) {
             for(int factor = 2 ; factor <= (int) Math.sqrt(num) ; factor++) {
@@ -89,7 +90,6 @@ public class LargestComponentSizeByFactor952 {
             rank = new int[size + 1];
             for(int i = 0 ; i < size + 1 ; i++) {
                 parent[i] = i;
-                rank[i] = i;
             }
         }
         public int find(int x) {

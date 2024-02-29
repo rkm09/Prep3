@@ -1,90 +1,95 @@
 package leetdaily.hard;
 
+import java.util.*;
+
 public class GCDTraversal2709 {
     public static void main(String[] args) {
         int[] nums = {2,3,6};
         System.out.println(canTraverseAllPairs(nums));
     }
+
     public static boolean canTraverseAllPairs(int[] nums) {
-        int MAX = 100000;
-        int N = nums.length;
-        boolean[] has = new boolean[MAX + 1];
-        for (int x: nums) {
-            has[x] = true;
-        }
-
-        // edge cases
-        if (N == 1) {
-            return true;
-        }
-        if (has[1]) {
-            return false;
-        }
-
-        // the general solution
-        int[] sieve = new int[MAX + 1];
-        for (int d = 2; d <= MAX; d++) {
-            if (sieve[d] == 0) {
-                for (int v = d; v <= MAX; v += d) {
-                    sieve[v] = d;
-                }
+        if(nums.length == 1) return true;
+        Set<Integer> set = new HashSet<>();
+        Arrays.stream(nums).forEach(set::add);
+        if(set.contains(1)) return false;
+        Map<Integer, List<Integer>> primeGroups = new HashMap<>();
+        List<Integer> uniqueElements = new ArrayList<>(set);
+        for(int num : uniqueElements) {
+            for(int prime : primeFactors(num)) {
+                primeGroups.compute(prime, (k, group) -> {
+                    List<Integer> li = new ArrayList<>(group != null ? group : List.of());
+                    li.add(num);
+                    return li;
+                });
+//          primeGroups.computeIfAbsent(num, ArrayList::new);
+//          primeGroups.get(num).add(num);
             }
         }
+//        int maxValue = Arrays.stream(nums).reduce(nums[0], Math::max);
+        UnionFind dsu = new UnionFind(uniqueElements.size());
+        for(Map.Entry<Integer, List<Integer>> group : primeGroups.entrySet()) {
+            int groupLeader = group.getValue().get(0);
+            for(int i = 1; i < group.getValue().size() ; i++)
+                dsu.union(groupLeader, group.getValue().get(i));
+        }
+        System.out.println(dsu.getNumGroups());
+        return dsu.getNumGroups() == 1;
+    }
 
-        DSU union = new DSU(2 * MAX + 1);
-        for (int x: nums) {
-            int val = x;
-            while (val > 1) {
-                int prime = sieve[val];
-                int root = prime+MAX;
-                if (union.find(root) != union.find(x)) {
-                    union.merge(root, x);
-                }
-                while (val % prime == 0) {
-                    val /= prime;
-                }
+    private static Set<Integer> primeFactors(int num) {
+        Set<Integer> factors = new HashSet<>();
+        for(int prime = 2 ; prime <= num / prime ; prime++) {
+            while(num % prime == 0) {
+                factors.add(prime);
+                num /= prime;
             }
         }
-
-        int cnt = 0;
-        for (int i=2; i <= MAX; i++) {
-            if (has[i] && union.find(i) == i) {
-                cnt++;
-            }
-        }
-        return cnt == 1;
+        if(num > 1) factors.add(num);
+        return factors;
     }
 }
-class DSU {
-    public int[] dsu;
-    public int[] size;
+    class UnionFind {
+        private int[] parent;
+        private int[] rank;
+        private int groupCnt;
+        UnionFind(int size) {
+            parent = new int[size + 1];
+            rank = new int[size + 1];
+            for(int i = 0 ; i <= size ; i++) {
+                parent[i] = i;
+            }
+            groupCnt = size;
+        }
+        public int find(int x) {
+            if(parent[x] != x) {
+                parent[x] = find(parent[x]);
+            }
+            return parent[x];
+        }
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if(rootX != rootY) {
+                if(rank[rootX] > rank[rootY]) {
+                    parent[rootY] = rootX;
+                } else if(rank[rootX] < rank[rootY]) {
+                    parent[rootX] = rootY;
+                } else {
+                    parent[rootY] = rootX;
+                    rank[rootX]++;
+                }
+                groupCnt--;
+            }
+        }
+        public boolean connected(int x, int y) {
+            return find(x) == find(y);
+        }
+        public int getNumGroups() {
+            return groupCnt;
+        }
+    }
 
-    public DSU(int N) {
-        dsu = new int[N + 1];
-        size = new int[N + 1];
-        for (int i = 0; i <= N; i++) {
-            dsu[i] = i;
-            size[i] = 1;
-        }
-    }
-    public int find(int x) {
-        return dsu[x] == x ? x : (dsu[x] = find(dsu[x]));
-    }
-    public void merge(int x, int y) {
-        int fx = find(x);
-        int fy = find(y);
-        if (fx == fy){
-            return;
-        }
-        if (size[fx] > size[fy]) {
-            int temp = fx;
-            fx = fy;
-            fy = temp;
-        }
-        dsu[fx] = fy;
-        size[fy] += size[fx];
-    }
-}
 
 /*
 You are given a 0-indexed integer array nums, and you are allowed to traverse between its indices. You can traverse between index i and index j, i != j, if and only if gcd(nums[i], nums[j]) > 1, where gcd is the greatest common divisor.
@@ -107,4 +112,57 @@ Explanation: There are 6 possible pairs of indices to traverse between: (0, 1), 
 Constraints:
 1 <= nums.length <= 105
 1 <= nums[i] <= 105
+ */
+
+
+/*
+//    public static boolean canTraverseAllPairs1(int[] nums) {
+//        int MAX = 100000;
+//        int N = nums.length;
+//        boolean[] has = new boolean[MAX + 1];
+//        for (int x: nums) {
+//            has[x] = true;
+//        }
+//
+//        // edge cases
+//        if (N == 1) {
+//            return true;
+//        }
+//        if (has[1]) {
+//            return false;
+//        }
+//
+//        // the general solution
+//        int[] sieve = new int[MAX + 1];
+//        for (int d = 2; d <= MAX; d++) {
+//            if (sieve[d] == 0) {
+//                for (int v = d; v <= MAX; v += d) {
+//                    sieve[v] = d;
+//                }
+//            }
+//        }
+//
+//        DSU union = new DSU(2 * MAX + 1);
+//        for (int x: nums) {
+//            int val = x;
+//            while (val > 1) {
+//                int prime = sieve[val];
+//                int root = prime+MAX;
+//                if (union.find(root) != union.find(x)) {
+//                    union.merge(root, x);
+//                }
+//                while (val % prime == 0) {
+//                    val /= prime;
+//                }
+//            }
+//        }
+//
+//        int cnt = 0;
+//        for (int i=2; i <= MAX; i++) {
+//            if (has[i] && union.find(i) == i) {
+//                cnt++;
+//            }
+//        }
+//        return cnt == 1;
+//    }
  */
