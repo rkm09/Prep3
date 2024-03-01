@@ -27,7 +27,7 @@ public class GCDTraversal2709 {
             }
         }
 //        int maxValue = Arrays.stream(nums).reduce(nums[0], Math::max);
-        UnionFind dsu = new UnionFind(uniqueElements.size());
+        UnionFind dsu = new UnionFind(uniqueElements);
         for(Map.Entry<Integer, List<Integer>> group : primeGroups.entrySet()) {
             int groupLeader = group.getValue().get(0);
             for(int i = 1; i < group.getValue().size() ; i++)
@@ -53,10 +53,11 @@ public class GCDTraversal2709 {
         private int[] parent;
         private int[] rank;
         private int groupCnt;
-        UnionFind(int size) {
-            parent = new int[size + 1];
-            rank = new int[size + 1];
-            for(int i = 0 ; i <= size ; i++) {
+        UnionFind(List<Integer> vertices) {
+            int size = vertices.size();
+            parent = new int[size];
+            rank = new int[size];
+            for(int i = 0 ; i < size ; i++) {
                 parent[i] = i;
             }
             groupCnt = size;
