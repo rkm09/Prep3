@@ -16,24 +16,53 @@ public class RemoveNthNode19 {
         }
     }
 
-    //    1 pass (2 pointer); time : O(l), space: O(1) [l - list size]
+    //    1 pass (2 pointer); time: O(n), space: O(1)
     public static ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode dummy = new ListNode(0);
-        dummy.next = head;
-        ListNode first = dummy;
-        ListNode second = dummy;
-        for(int i = 1 ; i <= n + 1 ; i++)
-            first = first.next;
-        while(first != null) {
-            first = first.next;
-            second = second.next;
+//        move the current node n steps into the list
+        ListNode currentNode = head;
+        for(int i = 0 ; i < n ; i++)
+            currentNode = currentNode.next;
+
+//        edge case: 1st element removal
+        if(currentNode == null)
+            return head.next;
+
+//        move both pointers until current node reaches the end of the list
+        ListNode nodeBeforeRemoved = head;
+
+        while(currentNode.next != null) {
+            currentNode = currentNode.next;
+            nodeBeforeRemoved = nodeBeforeRemoved.next;
         }
-        second.next = second.next.next;
-        return dummy.next;
+        nodeBeforeRemoved.next = nodeBeforeRemoved.next.next;
+
+        return head;
     }
 
-    //    [def] 2 pass (1 pointer); time: O(l), space: O(1) [fast]
+
+//    2 pass (1 pointer); time: O(n), space: O(1)
     public static ListNode removeNthFromEnd1(ListNode head, int n) {
+        ListNode currentNode = head;
+        int length = 0;
+        while(currentNode != null) {
+            currentNode = currentNode.next;
+            length++;
+        }
+//      edge case: remove 1st element
+        if(length == n) return head.next;
+
+        int nodeBeforeRemovedIndex = length - n - 1;
+        currentNode = head;
+
+        for(int i = 0 ; i < nodeBeforeRemovedIndex ; i++)
+            currentNode = currentNode.next;
+        currentNode.next = currentNode.next.next;
+
+        return head;
+    }
+
+    //    [def] 2 pass (1 pointer); time: O(n), space: O(1)
+    public static ListNode removeNthFromEnd2(ListNode head, int n) {
         ListNode current = head;
         int length = 0;
         while(current != null) {
@@ -53,28 +82,6 @@ public class RemoveNthNode19 {
         }
         return null;
     }
-
-
-//    2 pass (1 pointer); time: O(l), space: O(1)
-    public static ListNode removeNthFromEnd2(ListNode head, int n) {
-        ListNode dummy = new ListNode(0);
-        dummy.next = head;
-        int length = 0;
-        ListNode first = head;
-        while(first != null) {
-            first = first.next;
-            length++;
-        }
-        length -= n;
-        first = dummy;
-        while(length > 0) {
-            length--;
-            first = first.next;
-        }
-        first.next = first.next.next;
-        return dummy.next;
-    }
-
 
 }
 
