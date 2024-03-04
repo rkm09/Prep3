@@ -49,7 +49,7 @@ public class DiameterOfNaryTree1522 {
         return maxHeight1;
     }
 
-//    distance with depth; time: O(n), space: O(n) 
+//    distance with depth; time: O(n), space: O(n)
 //    The 'depth' of a node is the length of the path to the root node.
     public  int diameter1(Node root) {
         maxDepth(root, 0);
