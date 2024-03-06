@@ -1,7 +1,7 @@
 package leetdaily.easy;
 
 import java.util.Arrays;
-import java.util.List;
+
 
 public class MaxOddBinaryNumber2864 {
     public static void main(String[] args) {
@@ -11,23 +11,23 @@ public class MaxOddBinaryNumber2864 {
 
 //    greedy bit manipulation; (1 pass) 2 pointers; time: O(n), space: O(n) [fastest]
     public static String maximumOddBinaryNumber(String s) {
-        char[] carr = s.toCharArray();
+        char[] arr = s.toCharArray();
         int n = s.length();
         int left = 0, right = n - 1;
         while(left <= right) {
-            if(carr[left] == '1')
+            if(arr[left] == '1')
                 left++;
-            if(carr[right] == '0')
+            if(arr[right] == '0')
                 right--;
-            if(left < right && carr[left] == '0' && carr[right] == '1') {
-                carr[left] = '1';
-                carr[right] = '0';
+            if(left < right && arr[left] == '0' && arr[right] == '1') {
+                arr[left] = '1';
+                arr[right] = '0';
             }
         }
 //        swap rightmost one bit to the end
-        carr[left - 1] = '0';
-        carr[n - 1] = '1';
-        return new String(carr);
+        arr[left - 1] = '0';
+        arr[n - 1] = '1';
+        return new String(arr);
     }
 
 //    greedy + ones count; time: O(n), space: O(n)
@@ -47,16 +47,16 @@ public class MaxOddBinaryNumber2864 {
 
 //    greedy bit manipulation; sorting & swapping; time: O(nlogn), space: O(n)
     public static String maximumOddBinaryNumber2(String s) {
-        char[] carr = s.toCharArray();
+        char[] arr = s.toCharArray();
         int n = s.length();
-        Arrays.sort(carr);
+        Arrays.sort(arr);
         int secondLast = n - 2;
         for(int i = 0 ; i < n / 2 ; i++) {
-            char temp = carr[i];
-            carr[i] = carr[secondLast - i];
-            carr[secondLast - i] = temp;
+            char temp = arr[i];
+            arr[i] = arr[secondLast - i];
+            arr[secondLast - i] = temp;
         }
-        return new String(carr);
+        return new String(arr);
     }
 
 }
