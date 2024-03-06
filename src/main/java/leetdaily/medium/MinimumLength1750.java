@@ -6,7 +6,7 @@ public class MinimumLength1750 {
         System.out.println(minimumLength(s));
     }
 
-//    two pointer; time: O(n), space: O(1) 
+//    two pointer; time: O(n), space: O(1)
     public static int minimumLength(String s) {
         int left = 0, right = s.length() - 1;
         while(left < right && s.charAt(left) == s.charAt(right)) {
