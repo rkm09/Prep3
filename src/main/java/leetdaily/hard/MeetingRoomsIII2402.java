@@ -5,6 +5,7 @@ public class MeetingRoomsIII2402 {
         int[][] meetings = {{0,10},{1,5},{2,7},{3,4}};
         System.out.println(mostBooked(2, meetings));
     }
+
     public static int mostBooked(int n, int[][] meetings) {
 
         return 0;
