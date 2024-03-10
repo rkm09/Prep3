@@ -1,15 +1,13 @@
 package leetdaily.easy;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Intersection349 {
     public static void main(String[] args) {
         int[] nums1 = {4,9,5};
         int[] nums2 = {9,4,9,8,4};
         System.out.println(Arrays.toString(intersection(nums1, nums2)));
+//        can use retainAll in java too(inbuilt intersection set)
     }
 
 //    hashset [def]; time: O(n+m), space: O(n)
@@ -23,11 +21,27 @@ public class Intersection349 {
                 resSet.add(num);
             }
         }
+
         int[] res = new int[resSet.size()];
         int i = 0;
         for(int num : resSet)
             res[i++] = num;
         return res;
+    }
+
+//    hashmap;
+    public static int[] intersection1(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> seen = new HashMap<>();
+        List<Integer> result = new ArrayList<>();
+        for(int x : nums1)
+            seen.put(x, 1);
+        for(int x : nums2) {
+            if(seen.containsKey(x) && seen.get(x) == 1) {
+                result.add(x);
+                seen.put(x, 0);
+            }
+        }
+        return result.stream().mapToInt(x->x).toArray();
     }
 }
 
