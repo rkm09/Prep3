@@ -26,10 +26,7 @@ public class CustomSorting791 {
         }
         for(char c : freq.keySet()) {
             int count = freq.get(c);
-            while(count > 0) {
-                sb.append(c);
-                count--;
-            }
+            while(count-- > 0) sb.append(c);
         }
         return sb.toString();
     }
