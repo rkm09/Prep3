@@ -2,6 +2,7 @@ package leetdaily.medium;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class CustomSorting791 {
@@ -10,8 +11,45 @@ public class CustomSorting791 {
         System.out.println(customSortString(order, s));
     }
 
-//    [def]; hashmap; time: O(n), space: O(n)
+//    hashmap; time: O(n), space: O(n); [fastest]
     public static String customSortString(String order, String s) {
+        Map<Character, Integer> freq = new HashMap<>();
+        StringBuilder sb = new StringBuilder();
+        for(char c : s.toCharArray())
+            freq.put(c, freq.getOrDefault(c, 0) + 1);
+        for(char c : order.toCharArray()) {
+            int count = freq.getOrDefault(c, 0);
+            while(count-- > 0) {
+                sb.append(c);
+                freq.put(c, count);
+            }
+        }
+        for(char c : freq.keySet()) {
+            int count = freq.get(c);
+            while(count > 0) {
+                sb.append(c);
+                count--;
+            }
+        }
+        return sb.toString();
+    }
+
+//    custom comparator; time: O(nlogn), space: O(n)
+    public static String customSortString1(String order, String s) {
+        int n = s.length();
+        Character[] result = new Character[n];
+        for(int i = 0 ; i < n ; i++)
+            result[i] = s.charAt(i);
+        Arrays.sort(result, Comparator.comparing(order::indexOf));
+//        return Arrays.stream(result).map(String::valueOf).collect(Collectors.joining());
+        StringBuilder sb = new StringBuilder();
+        for(char c : result)
+            sb.append(c);
+        return sb.toString();
+    }
+
+//    [def]; hashmap; time: O(nlogn), space: O(n)
+    public static String customSortString2(String order, String s) {
         Map<Integer, Character> map = new HashMap<>();
         Map<Character, Integer> count = new HashMap<>();
         StringBuilder sb = new StringBuilder();
