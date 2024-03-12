@@ -7,7 +7,21 @@ public class MeetingRoomsIII2402 {
     }
 
     public static int mostBooked(int n, int[][] meetings) {
+        int[] roomAvailability = new int[n];
+        int[] meetingCount = new int[n];
+        for(int[] meeting : meetings) {
+            int start = meeting[0], end = meeting[1];
+            boolean foundUnusedRoom = false;
+            for(int i = 0 ; i < n ; i ++) {
+                if(roomAvailability[i] <= start) {
+                    roomAvailability[i] = end;
+                    foundUnusedRoom = true;
+                    meetingCount[i]++;
+                }
 
+            }
+
+        }
         return 0;
     }
 }
