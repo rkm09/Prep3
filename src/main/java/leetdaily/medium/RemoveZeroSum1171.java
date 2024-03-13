@@ -4,11 +4,40 @@ import common.ListNode;
 
 public class RemoveZeroSum1171 {
     public static void main(String[] args) {
-        ListNode head = new ListNode(1);
+        ListNode next3 = new ListNode(1);
+        ListNode next2 = new ListNode(3, next3);
+        ListNode next1 = new ListNode(3, next2);
+        ListNode next = new ListNode(-3, next1);
+        ListNode head = new ListNode(1, next);
+        ListNode result = removeZeroSumSublists(head);
+        while(result != null) {
+            System.out.println(result.val);
+            result = result.next;
+        }
+    }
+
+//    prefix sum & hashmap; time: O(n), space: O(n)
+    public static ListNode removeZeroSumSublists(ListNode head) {
 
     }
-    public static ListNode removeZeroSumSublists(ListNode head) {
-        return null;
+
+//    prefix sum; time: O(n^2), space: O(1)
+    public static ListNode removeZeroSumSublists1(ListNode head) {
+        ListNode front = new ListNode(0, head);
+        ListNode start = front;
+        while(start != null) {
+            int prefixSum = 0;
+            ListNode end = start.next;
+            while(end != null) {
+                prefixSum += end.val;
+                if(prefixSum == 0) {
+                    start.next = end.next;
+                }
+                end = end.next;
+            }
+            start = start.next;
+        }
+        return front.next;
     }
 }
 
