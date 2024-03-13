@@ -2,6 +2,9 @@ package leetdaily.medium;
 
 import common.ListNode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RemoveZeroSum1171 {
     public static void main(String[] args) {
         ListNode next3 = new ListNode(1);
@@ -18,7 +21,27 @@ public class RemoveZeroSum1171 {
 
 //    prefix sum & hashmap; time: O(n), space: O(n)
     public static ListNode removeZeroSumSublists(ListNode head) {
-
+        ListNode front = new ListNode(0, head);
+        ListNode current = front;
+        int prefixSum = 0;
+        Map<Integer, ListNode> prefixSumToNode = new HashMap<>();
+        prefixSumToNode.put(0, front);
+//      1st pass: calculate prefix sum
+        while(current != null) {
+            prefixSum += current.val;;
+            prefixSumToNode.put(prefixSum, current);
+            current = current.next;
+        }
+//        reset sum & current
+        prefixSum = 0;
+        current = front;
+//      2nd pass:  delete consecutive sequences of zero sum
+        while(current != null) {
+            prefixSum += current.val;
+            current.next = prefixSumToNode.get(prefixSum).next;
+            current = current.next;
+        }
+        return front.next;
     }
 
 //    prefix sum; time: O(n^2), space: O(1)
