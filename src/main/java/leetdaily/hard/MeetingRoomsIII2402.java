@@ -1,28 +1,96 @@
 package leetdaily.hard;
 
+import java.util.*;
+
 public class MeetingRoomsIII2402 {
     public static void main(String[] args) {
         int[][] meetings = {{0,10},{1,5},{2,7},{3,4}};
         System.out.println(mostBooked(2, meetings));
     }
 
+//    sort & count; time: O(mlogm + m.n), space: O(n + logm) [m - number of meetings, n - number of rooms] [faster]
     public static int mostBooked(int n, int[][] meetings) {
-        int[] roomAvailability = new int[n];
+        long[] roomAvailabilityTime = new long[n];
         int[] meetingCount = new int[n];
+
+//        sort meetings on start time
+        Arrays.sort(meetings, Comparator.comparingInt(a->a[0]));
+
+//        check allocation for all meetings
         for(int[] meeting : meetings) {
             int start = meeting[0], end = meeting[1];
             boolean foundUnusedRoom = false;
+            long minAvailableTime = Long.MAX_VALUE;
+            int minAvailableTimeRoom = 0;
+
+//            iterate through all available rooms
             for(int i = 0 ; i < n ; i ++) {
-                if(roomAvailability[i] <= start) {
-                    roomAvailability[i] = end;
+                if(roomAvailabilityTime[i] <= start) {
+                    roomAvailabilityTime[i] = end;
                     foundUnusedRoom = true;
                     meetingCount[i]++;
+                    break;
                 }
-
+//                if room not found, keep track of min index
+                if(minAvailableTime > roomAvailabilityTime[i]) {
+                    minAvailableTime = roomAvailabilityTime[i];
+                    minAvailableTimeRoom = i;
+                }
             }
-
+//            check for room allocation status and update time for the new meeting
+            if(!foundUnusedRoom) {
+                roomAvailabilityTime[minAvailableTimeRoom] += end - start;
+                meetingCount[minAvailableTimeRoom]++;
+            }
         }
-        return 0;
+        int maxMeetingCount = 0, maxMeetingCountRoom = 0;
+        for(int i = 0 ; i < n ; i++) {
+           if(maxMeetingCount < meetingCount[i]) {
+               maxMeetingCount = meetingCount[i];
+               maxMeetingCountRoom = i;
+           }
+        }
+        return maxMeetingCountRoom;
+    }
+
+//    sorting & counting using priority queue; time: O(mlogm + m.logn), space: O(n + logm) [m - number of meetings, n - number of rooms]
+//    using a priority queue to simulate the min tracking time in the previous approach
+    public static int mostBooked1(int n, int[][] meetings) {
+//        store end time and room number
+        PriorityQueue<long[]> usedRooms = new PriorityQueue<>((a,b)-> a[0] != b[0] ? Long.compare(a[0], b[0]) :
+                Long.compare(a[1], b[1]));
+        Queue<Integer> unusedRooms = new PriorityQueue<>();
+        for(int i = 0 ; i < n ; i++)
+            unusedRooms.offer(i);
+        int[] meetingCount = new int[n];
+
+        Arrays.sort(meetings, Comparator.comparingInt(a->a[0]));
+
+        for(int[] meeting : meetings) {
+            int start = meeting[0], end = meeting[1];
+            while(!usedRooms.isEmpty() && usedRooms.peek()[0] <= start) {
+                int room = (int) usedRooms.poll()[1];
+                unusedRooms.offer(room);
+            }
+            if (!unusedRooms.isEmpty()) {
+                int room = unusedRooms.poll();
+                usedRooms.offer(new long[]{end, room});
+                meetingCount[room]++;
+            } else if(!usedRooms.isEmpty()) {
+                long roomAvailabilityTime = usedRooms.peek()[0];
+                int room = (int) usedRooms.poll()[1];
+                usedRooms.offer(new long[]{roomAvailabilityTime + end - start, room});
+                meetingCount[room]++;
+            }
+        }
+        int maxMeetingCount = 0, maxMeetingCountRoom = 0;
+        for(int i = 0 ; i < n ; i++) {
+            if(maxMeetingCount < meetingCount[i]) {
+                maxMeetingCountRoom = i;
+                maxMeetingCount = meetingCount[i];
+            }
+        }
+        return maxMeetingCountRoom;
     }
 }
 
