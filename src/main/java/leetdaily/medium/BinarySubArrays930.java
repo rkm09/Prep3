@@ -10,6 +10,7 @@ public class BinarySubArrays930 {
     }
 
 //    sliding window; time: O(n), space: O(1) [fastest]
+//    Although there is a nested loop, each pointer starts at 0 and gets incremented at most n times, so each pointer makes just 1 pass through the array.
     public static int numSubarraysWithSum1(int[] nums, int goal) {
         return slidingWindowAtMost(nums, goal) - slidingWindowAtMost(nums, goal - 1);
     }
