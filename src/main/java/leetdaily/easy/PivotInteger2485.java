@@ -46,7 +46,7 @@ public class PivotInteger2485 {
         return -1;
     }
 
-//    Maths; time: O(1), space: O(1)
+//    Maths; time: O(1), space: O(1) [fastest]
 //    Sum[1...x] = Sum[x...n]
 //    deriving Sum[x..n] = Sum[1..n] - Sum[1..(x-1)] ps. remove 1 to (x - 1) from  1 to n [so as to preserve x inclusive]
 //    when you solve => x(x + 1)/2 = n(n + 1)/2 - (x-1)x/2 => x = sqrt(n(n+1)/2);
