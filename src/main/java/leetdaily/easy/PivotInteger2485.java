@@ -1,13 +1,27 @@
 package leetdaily.easy;
 
 public class PivotInteger2485 {
+    private static final int MAX = 1000;
     public static void main(String[] args) {
         System.out.println(pivotInteger1(8));
     }
 
 //    binary search; time: O(logn), space: O(1)
+//    from derivation in math section; x^2 = n(n+1)/2 => pivot * pivot - sum = 0 for pivot integer
     public static int pivotInteger(int n) {
-//      to-do
+        int left = 1, right = n;
+        int totalSum = n * (n + 1) / 2;
+        while(left < right) {
+            int mid = left + (right - left) / 2;
+            if(mid * mid - totalSum < 0) {
+                left = mid + 1;
+            } else {
+//                if it is equal or greater
+                right = mid;
+            }
+        }
+        if(left * left - totalSum == 0)
+            return left;
         return -1;
     }
 
@@ -16,6 +30,7 @@ public class PivotInteger2485 {
         int leftValue = 1, rightValue = n;
         int sumLeft = leftValue, sumRight = rightValue;
 
+//        edge case
         if(n == 1) return n;
 
         while(leftValue < rightValue) {
@@ -31,14 +46,29 @@ public class PivotInteger2485 {
     }
 
 //    Maths; time: O(1), space: O(1)
+//    Sum[1...x] = Sum[x...n]
+//    deriving Sum[x..n] = Sum[1..n] - Sum[1..(x-1)] ps. remove 1 to (x - 1) from  1 to n [so as to preserve x inclusive]
+//    when you solve => x(x + 1)/2 = n(n + 1)/2 - (x-1)x/2 => x = sqrt(n(n+1)/2);
     public static int pivotInteger2(int n) {
         int sum = n * (n + 1) / 2;
         int pivot = (int) Math.sqrt(sum);
         return pivot * pivot == sum ? pivot : -1;
     }
 
-//    brute force; time: O(n^2), space: O(1)
+//    precompute; time: O(m), space: O(m) [where m is the max precomputed value count]
+//    Traditional dynamic programming involves reusing intermediate results (e.g., DP[y] based on DP[x] where x is smaller than y). However, this approach focuses on pre-computing and storing values for efficient retrieval, so it is considered pre-computation and storage in a lookup table rather than dynamic programming.
     public static int pivotInteger3(int n) {
+        int[] precompute = new int[MAX + 1];
+        for(int i = 1, j = 1; i <= MAX ; i++) {
+            int sum = i * (i + 1) / 2;
+            while(j * j < sum) j++;
+            precompute[i] = j * j == sum ? j : -1;
+        }
+        return precompute[n];
+    }
+
+//    brute force; time: O(n^2), space: O(1)
+    public static int pivotInteger4(int n) {
         for(int i = 1 ; i <= n ; i++) {
             int leftSum = 0, rightSum = 0;
             for(int j = 1 ; j <= i ; j++) {
