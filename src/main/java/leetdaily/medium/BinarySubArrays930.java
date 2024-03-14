@@ -39,7 +39,7 @@ public class BinarySubArrays930 {
         }
         return totalCount;
     }
-    
+
 
 //    [def]; prefix sum; time: O(n^2), space: O(1)
     public static int numSubarraysWithSum2(int[] nums, int goal) {
