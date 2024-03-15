@@ -17,7 +17,7 @@ public class MeetingRoomsII253 {
         Arrays.sort(intervals, Comparator.comparingInt(a->a[0]));
         allocator.offer(intervals[0][1]);
         for(int i = 1 ; i < intervals.length ; i++) {
-            if(intervals[i][0] >= allocator.peek()) {
+            if(!allocator.isEmpty() && intervals[i][0] >= allocator.peek()) {
                 allocator.poll();
             }
             allocator.offer(intervals[i][1]);
@@ -28,7 +28,7 @@ public class MeetingRoomsII253 {
 //    chronological ordering; time: O(nlogn), space: O(n) [faster]
     public static int minMeetingRooms1(int[][] intervals) {
         int n = intervals.length;
-        if(n == 0) return 0;
+        // if(n == 0) return 0;
         int[] start = new int[n];
         int[] end = new int[n];
         for(int i = 0 ; i < n ; i++) {
