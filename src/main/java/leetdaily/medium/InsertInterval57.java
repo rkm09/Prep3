@@ -41,6 +41,7 @@ public class InsertInterval57 {
         int n = intervals.length;
         if(n == 0) return new int[][]{newInterval};
         int left = 0, right = n - 1, target = newInterval[0];
+//        get insertion position
         while(left <= right) {
             int mid = left + (right - left) / 2;
             if(intervals[mid][0] < target) {
