@@ -1,5 +1,6 @@
 package leetdaily.medium;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,26 @@ public class MaxContiguousArray525 {
         return maxLength;
     }
 
+//    using extra array; time: O(n), space: O(n).arr [faster]
+    public static int findMaxLength1(int[] nums) {
+        int n = nums.length;
+//        count range: -n to +n
+        int[] arr = new int[2 * n + 1];
+        Arrays.fill(arr, -2);
+        arr[n] = -1;
+        int maxLength = 0, count = 0;
+        for(int i = 0 ; i < n ; i++) {
+            count += (nums[i] == 1 ? 1 : -1);
+            if(arr[count + n] >= -1) {
+                maxLength = Math.max(maxLength, i - arr[count + n]);
+            } else {
+                arr[count + n] = i;
+            }
+        }
+        return maxLength;
+    }
+
+
 //    brute force; TLE; time: O(n^2), space: O(1)
     public static int findMaxLength2(int[] nums) {
         int n = nums.length;
@@ -32,9 +53,8 @@ public class MaxContiguousArray525 {
         int zeroes = 0, ones = 0;
         for(int start = 0 ; start < n ; start++) {
             for(int end = start ; end < n ; end++) {
-                if(nums[end] == 0) {
-                    zeroes++;
-                } else ones++;
+                if(nums[end] == 0) zeroes++;
+                else ones++;
                 if(zeroes == ones)
                     maxLength = Math.max(maxLength, end - start + 1);
             }
