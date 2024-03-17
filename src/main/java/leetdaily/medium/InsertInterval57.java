@@ -50,6 +50,7 @@ public class InsertInterval57 {
                 right = mid - 1;
             }
         }
+//        merge all into one list
         List<int[]> result = new ArrayList<>();
         for(int i = 0 ; i < left ; i++) {
             result.add(intervals[i]);
