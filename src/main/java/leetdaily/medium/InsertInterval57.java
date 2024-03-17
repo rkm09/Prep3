@@ -12,8 +12,8 @@ public class InsertInterval57 {
         System.out.println(Arrays.toString(res));
     }
 
-//    linear search; time: O(n), space: O(1)
-    public static int[][] insert(int[][] intervals, int[] newInterval) {
+    //    linear search; time: O(n), space: O(1)
+    public static int[][] insert1(int[][] intervals, int[] newInterval) {
         List<int[]> res  = new ArrayList<>();
         int n = intervals.length, i = 0;
 //        case 1: no overlap before merge
@@ -35,6 +35,42 @@ public class InsertInterval57 {
 
         return res.toArray(new int[res.size()][]);
     }
+
+//    binary search; time: O(n + logn) ~ O(n), space: O(n)
+    public static int[][] insert(int[][] intervals, int[] newInterval) {
+        int n = intervals.length;
+        if(n == 0) return new int[][]{newInterval};
+        int left = 0, right = n - 1, target = newInterval[0];
+        while(left <= right) {
+            int mid = left + (right - left) / 2;
+            if(intervals[mid][0] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        List<int[]> result = new ArrayList<>();
+        for(int i = 0 ; i < left ; i++) {
+            result.add(intervals[i]);
+        }
+        result.add(newInterval);
+        for(int i = left ; i < n ; i++) {
+            result.add(intervals[i]);
+        }
+//        merge without overlap
+        List<int[]> merged = new ArrayList<>();
+        for(int[] interval : result) {
+//            if merged is empty or there is no overlap
+            if(merged.isEmpty() || merged.get(merged.size() - 1)[1] < interval[0])
+                merged.add(interval);
+            else {
+                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], interval[1]);
+            }
+        }
+        return merged.toArray(new int[merged.size()][]);
+    }
+
+
 }
 
 /*
