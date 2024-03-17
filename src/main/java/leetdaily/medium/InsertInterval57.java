@@ -12,7 +12,7 @@ public class InsertInterval57 {
         System.out.println(Arrays.toString(res));
     }
 
-    //    linear search; time: O(n), space: O(1)
+    //    linear search; time: O(n), space: O(1) [faster]
     public static int[][] insert1(int[][] intervals, int[] newInterval) {
         List<int[]> res  = new ArrayList<>();
         int n = intervals.length, i = 0;
@@ -44,21 +44,19 @@ public class InsertInterval57 {
 //        get insertion position
         while(left <= right) {
             int mid = left + (right - left) / 2;
-            if(intervals[mid][0] < target) {
+            if(intervals[mid][0] < target)
                 left = mid + 1;
-            } else {
+             else
                 right = mid - 1;
-            }
         }
-//        merge all into one list
+//        combine all into a single list
         List<int[]> result = new ArrayList<>();
-        for(int i = 0 ; i < left ; i++) {
+        for(int i = 0 ; i < left ; i++)
             result.add(intervals[i]);
-        }
         result.add(newInterval);
-        for(int i = left ; i < n ; i++) {
+        for(int i = left ; i < n ; i++)
             result.add(intervals[i]);
-        }
+
 //        merge without overlap
         List<int[]> merged = new ArrayList<>();
         for(int[] interval : result) {
