@@ -13,7 +13,7 @@ public class BalancedBinaryTree110 {
         System.out.println(bn.isBalanced(root));
     }
 
-//    top down recursion; time: O(nlogn), space: O(n) 
+//    top down recursion; time: O(nlogn), space: O(n)
     public boolean isBalanced1(TreeNode root) {
         if(root == null) return true;
         return (Math.abs(height(root.left) - height(root.right)) < 2)
@@ -29,6 +29,7 @@ public class BalancedBinaryTree110 {
     public boolean isBalanced(TreeNode root) {
         return treeHelper(root).isBalanced;
     }
+
     private TreeInfo treeHelper(TreeNode node) {
         if(node == null) return new TreeInfo(-1, true);
 
