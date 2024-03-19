@@ -5,12 +5,32 @@ import java.util.*;
 
 public class TaskScheduler621 {
     public static void main(String[] args) {
-        char[] tasks = {'A','A','A','B','B','B'};
+        char[] tasks = {'A','A','B','C'};
         System.out.println(leastInterval(tasks, 2));
     }
 
-//    priority queue; time: O(n), space: O(1)
+//    all approaches use greedy => decisions are made step by step based on what seems best at the moment to reach an overall optimal
+
+//    filling the slots and sorting; time: O(n), space:O(n) [fastest]
     public static int leastInterval(char[] tasks, int n) {
+        int[] freq = new int[26];
+        for(char c : tasks)
+            freq[c - 'A']++;
+//        sort on increasing count
+        Arrays.sort(freq);
+
+//       max interval length
+        int maxIdleFreq = freq[25] - 1;
+        int idleSlots = maxIdleFreq * n;
+        for(int i = 24 ; i >= 0 && freq[i] > 0; i--) {
+            idleSlots -= Math.min(maxIdleFreq, freq[i]);
+        }
+        return idleSlots > 0 ? idleSlots + tasks.length : tasks.length;
+    }
+
+//    choosing tasks with max frequency minimizes overall idle time
+//    priority queue; time: O(n), space: O(1) [pq operations take O(logk), so overall O(nlogk); but since k = 26 (constant); hence O(n)]
+    public static int leastInterval1(char[] tasks, int n) {
         int[] freq = new int[26];
         for(char c : tasks)
             freq[c - 'A']++;
@@ -30,7 +50,7 @@ public class TaskScheduler621 {
                      store.add(currentFreq - 1);
                  taskCount++;
             }
-//            restore update frequencies to the heap
+//            restore updated frequencies to the heap
             store.forEach(pq::offer);
 //            add time for completed cycle
             time += (pq.isEmpty() ? taskCount : n + 1);
