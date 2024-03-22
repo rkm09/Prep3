@@ -4,9 +4,12 @@ public class RemoveVowels1119 {
     public static void main(String[] args) {
         String s = "leetcodeisacommunityforcoders";
         System.out.println(removeVowels(s));
+        System.out.println(s.replaceAll("[aeiou]", ""));
     }
 
-//    string builder [def]; time: O(n), space: O(n)
+//    good to know: can be solved easily by replaceAll(). but we are not going to use built in
+
+//    string builder [def]; time: O(n), space: O(1) [return space not counted]
     public static String removeVowels(String s) {
         StringBuilder sb = new StringBuilder();
         String vowels = "aeiou";
@@ -16,6 +19,18 @@ public class RemoveVowels1119 {
                 sb.append(letter);
         }
         return sb.toString();
+    }
+
+//    time: O(n), space: O(1)
+    public static String removeVowels1(String s) {
+        StringBuilder sb = new StringBuilder();
+        for(char c : s.toCharArray()) {
+            if(!isVowel(c)) sb.append(c);
+        }
+        return sb.toString();
+    }
+    private static Boolean isVowel(Character c) {
+        return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
     }
 }
 
