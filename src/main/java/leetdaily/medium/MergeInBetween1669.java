@@ -2,6 +2,9 @@ package leetdaily.medium;
 
 import common.ListNode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MergeInBetween1669 {
     public static void main(String[] args) {
         ListNode next3 = new ListNode(3);
@@ -10,7 +13,7 @@ public class MergeInBetween1669 {
         ListNode list = new ListNode(0, next1);
         ListNode next11 = new ListNode(5);
         ListNode list1 = new ListNode(4, next11);
-        ListNode res = mergeInBetween(list, 1, 2, list1);
+        ListNode res = mergeInBetween1(list, 1, 2, list1);
         while(res != null) {
             System.out.println(res.val);
             res = res.next;
@@ -35,10 +38,69 @@ public class MergeInBetween1669 {
         }
 
         list2.next = end.next;
-//        this step of end.next = null is not necessary, but is a good practise to ensure unpredictable behaviour from the removed nodes
+//        set end.next = null, so that there aren't multiple pointers to node at index b + 1;
+//        Setting end.next to null is not necessary to solve this problem, but is a good practice to prevent unpredictable behavior. This way, modifications made to the removed nodes won't affect the result linked list.
         end.next = null;
 
         return list1;
+    }
+
+    public static ListNode mergeInBetween1(ListNode list1, int a, int b, ListNode list2) {
+        List<Integer> mergeList = new ArrayList<>();
+        for(int i = 0 ; i < a ; i++) {
+            mergeList.add(list1.val);
+            list1 = list1.next;
+        }
+        while(list2 != null) {
+            mergeList.add(list2.val);
+            list2 = list2.next;
+        }
+        for(int i = a ; i <= b ; i++) {
+            list1 = list1.next;
+        }
+        while(list1 != null) {
+            mergeList.add(list1.val);
+            list1 = list1.next;
+        }
+//        process in reverse, so that we are at the head when its time to return
+        ListNode resultList = null;
+        for(int i = mergeList.size() - 1 ; i >= 0 ; i--) {
+            ListNode newNode = new ListNode(mergeList.get(i), resultList);
+            resultList = newNode;
+        }
+        return resultList;
+    }
+
+//    the same thing with while and without modifying input; time: O(n+m), space: O(n+m)
+    public static ListNode mergeInBetween2(ListNode list1, int a, int b, ListNode list2) {
+        List<Integer> mergeList = new ArrayList<>();
+        ListNode current1 = list1;
+        int index = 0;
+        while(index < a) {
+            mergeList.add(current1.val);
+            current1 = current1.next;
+            index++;
+        }
+        ListNode current2 = list2;
+        while(current2 != null) {
+            mergeList.add(current2.val);
+            current2 = current2.next;
+        }
+        while(index <= b) {
+            current1 = current1.next;
+            index++;
+        }
+        while(current1 != null) {
+            mergeList.add(current1.val);
+            current1 = current1.next;
+        }
+//        process in reverse, so that we are at the head when its time to return
+        ListNode resultList = null;
+        for(int i = mergeList.size() - 1 ; i >= 0 ; i--) {
+            ListNode newNode = new ListNode(mergeList.get(i), resultList);
+            resultList = newNode;
+        }
+        return resultList;
     }
 }
 
