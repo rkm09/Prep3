@@ -6,6 +6,7 @@ public class MinArrowShots452 {
         System.out.println(findMinArrowShots(points));
     }
     public static int findMinArrowShots(int[][] points) {
+
         return 0;
     }
 }
