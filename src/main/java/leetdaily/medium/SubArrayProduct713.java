@@ -6,7 +6,9 @@ public class SubArrayProduct713 {
         System.out.println(numSubarrayProductLessThanK1(nums, 100));
     }
 
-//    sliding window; time: O(n), space: O(1)
+//    sliding window; time: O(n), space: O(1) [fastest & optimal]
+//    The sliding window approach is efficient for finding subarrays with a product less than a given value,
+//    but it relies on the fact that the integers in the array are positive.
     public static int numSubarrayProductLessThanK(int[] nums, int k) {
 //        edge case (strictly less than k for k = 0 or 1)
         if(k <= 1) return 0;
@@ -24,6 +26,9 @@ public class SubArrayProduct713 {
     }
 
 //    binary search; time: O(nlogn), space: O(1)
+//    the binary search approach is more versatile and can handle arrays containing both positive and negative integers with some modifications.
+//    This is because it operates on the logarithms of the elements rather than the elements themselves. direct logarithmic values of negative numbers are not defined in the real number scale.
+//    Therefore, to handle negative numbers, appropriate shifting of the elements may be necessary to ensure that the logarithmic values used in the algorithm are valid and meaningful.
     public static int numSubarrayProductLessThanK1(int[] nums, int k) {
         if(k == 0) return 0;
         double logK = Math.log(k);
