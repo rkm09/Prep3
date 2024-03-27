@@ -1,5 +1,7 @@
 package leetdaily.medium;
 
+import java.util.Arrays;
+
 public class SubArrayProduct713 {
     public static void main(String[] args) {
         int[] nums = {1,5,2,6};
@@ -38,6 +40,7 @@ public class SubArrayProduct713 {
         for(int i = 0 ; i < nums.length ; i++) {
             logsPrefixSum[i + 1] = logsPrefixSum[i] + Math.log(nums[i]);
         }
+
 //      calculate the sub array count with product less than or equal to k
         for(int idx = 0 ; idx < m ; idx++) {
             int low = idx + 1, high = m;
