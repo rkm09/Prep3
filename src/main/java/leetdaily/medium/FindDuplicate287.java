@@ -40,12 +40,7 @@ public class FindDuplicate287 {
     }
 
     public static int findDuplicate3(int[] nums) {
-        int sum = 0, cnt = 0;
-        for(int num : nums) {
-            sum += num;
-            cnt ^= num;
-        }
-        return (sum - cnt) / 2;
+        return 0;
     }
 }
 
