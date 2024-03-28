@@ -8,6 +8,17 @@ public class FindDuplicate287 {
         System.out.println(findDuplicate2(nums));
     }
 
+    //    set; time: O(n), space: O(n)
+    public static int findDuplicate1(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for(int num: nums) {
+            if(set.contains(num))
+                return num;
+            set.add(num);
+        }
+        return -1;
+    }
+
 //    floyd's tortoise and hare; cycle detection; time: O(n), space: O(1) [fast]
 //    x, nums[x], nums[nums[x]], nums[nums[nums[x]]], ....
 //    Each new element in the sequence is an element in nums at the index of the previous element.
@@ -32,18 +43,7 @@ public class FindDuplicate287 {
         }
         return hare;
     }
-    
 
-//    set; time: O(n), space: O(n)
-    public static int findDuplicate1(int[] nums) {
-        Set<Integer> set = new HashSet<>();
-        for(int num: nums) {
-            if(set.contains(num))
-                return num;
-            set.add(num);
-        }
-        return -1;
-    }
 
 //    mark as visited; time: O(n), space: O(1)
     public static int findDuplicate2(int[] nums) {
