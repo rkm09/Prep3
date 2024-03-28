@@ -24,6 +24,25 @@ public class LengthOfLongest2958 {
         }
         return res;
     }
+
+//    sliding window with single loop; time: O(n), space: O(n)
+    public static int maxSubarrayLength1(int[] nums, int k) {
+        int start = 0, freqOverK = 0, n = nums.length;
+        Map<Integer, Integer> freq = new HashMap<>();
+        for(int end = 0 ; end < nums.length ; end++) {
+            freq.put(nums[end], freq.getOrDefault(nums[end], 0) + 1);
+//            shrink window
+            if(freq.get(nums[end]) == k + 1)
+                freqOverK++;
+            if(freqOverK > 0) {
+                freq.put(nums[start], freq.get(nums[start]) - 1);
+                if(freq.get(nums[start]) == k)
+                    freqOverK--;
+                start++;
+            }
+        }
+        return n - start;
+    }
 }
 
 /*
