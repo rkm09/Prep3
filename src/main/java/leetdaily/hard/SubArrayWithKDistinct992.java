@@ -1,4 +1,4 @@
-package leetdaily.medium;
+package leetdaily.hard;
 
 import java.util.HashMap;
 import java.util.Map;
