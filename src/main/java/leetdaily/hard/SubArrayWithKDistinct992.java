@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class SubArrayWithKDistinct992 {
     public static void main(String[] args) {
-        int[] nums = {1,2,3,1,2};
+        int[] nums = {1,2,1,2,3};
         System.out.println(subarraysWithKDistinct1(nums, 2));
     }
 
@@ -35,23 +35,25 @@ public class SubArrayWithKDistinct992 {
         int[] distinctCount = new int[n + 1];
         int totalCount = 0, left = 0, right = 0, currCount = 0;
         while(right < n) {
-//            increment the count of the current element in the window
+//            increment the count of the current element in the window; decrease k only if distinct
             if(distinctCount[nums[right++]]++ == 0)
                 k--;
-//            if k becomes negative, adjust the window from the left
+//            if k becomes negative, adjust the window size from the left
             if(k < 0) {
 //                move left pointer until the count of distinct elements becomes valid again
                 --distinctCount[nums[left++]];
                 k++;
+//                previous count cannot be added, reset count for new window
                 currCount = 0;
             }
-//            if becomes zero, calculate sub arrays
+//            if k becomes zero, calculate the sub arrays
             if(k == 0) {
-//                while the count of left remains > 1, keep shrinking the window from the left
+//                while the count of left remains > 1 (duplicates), keep shrinking the window from the left
                 while(distinctCount[nums[left]] > 1) {
                     --distinctCount[nums[left++]];
                     currCount++;
                 }
+//                add 1 for the current sub array
                 totalCount += (currCount + 1);
             }
         }
