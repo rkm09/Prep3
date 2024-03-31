@@ -6,7 +6,7 @@ import java.util.Map;
 public class SubArrayWithKDistinct992 {
     public static void main(String[] args) {
         int[] nums = {1,2,3,1,2};
-        System.out.println(subarraysWithKDistinct(nums, 2));
+        System.out.println(subarraysWithKDistinct1(nums, 2));
     }
 
 //    sliding window; time: O(n), space: O(n)
@@ -25,6 +25,35 @@ public class SubArrayWithKDistinct992 {
                 left++;
             }
             totalCount += (right - left + 1);
+        }
+        return totalCount;
+    }
+
+//    sliding window (one pass); time : O(n), space: O(n) [faster]
+    public static int subarraysWithKDistinct1(int[] nums, int k) {
+        int n = nums.length;
+        int[] distinctCount = new int[n + 1];
+        int totalCount = 0, left = 0, right = 0, currCount = 0;
+        while(right < n) {
+//            increment the count of the current element in the window
+            if(distinctCount[nums[right++]]++ == 0)
+                k--;
+//            if k becomes negative, adjust the window from the left
+            if(k < 0) {
+//                move left pointer until the count of distinct elements becomes valid again
+                --distinctCount[nums[left++]];
+                k++;
+                currCount = 0;
+            }
+//            if becomes zero, calculate sub arrays
+            if(k == 0) {
+//                while the count of left remains > 1, keep shrinking the window from the left
+                while(distinctCount[nums[left]] > 1) {
+                    --distinctCount[nums[left++]];
+                    currCount++;
+                }
+                totalCount += (currCount + 1);
+            }
         }
         return totalCount;
     }
