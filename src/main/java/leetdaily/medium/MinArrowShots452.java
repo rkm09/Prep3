@@ -1,13 +1,30 @@
 package leetdaily.medium;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class MinArrowShots452 {
     public static void main(String[] args) {
         int[][] points = {{10,16},{2,8},{1,6},{7,12}};
         System.out.println(findMinArrowShots(points));
     }
-    public static int findMinArrowShots(int[][] points) {
 
-        return 0;
+//    greedy; time: O(nlogn), space: O(n)
+//    The idea of the greedy algorithm is to pick the locally optimal move at each step,
+//    that will lead to the globally optimal solution.
+    public static int findMinArrowShots(int[][] points) {
+        int arrows = 1;
+        Arrays.sort(points, Comparator.comparingInt(p->p[1]));
+        int firstEnd = points[0][1], xStart, xEnd;
+        for(int[] point : points) {
+            xStart = point[0];
+            xEnd = point[1];
+            if(firstEnd < xStart) {
+                arrows++;
+                firstEnd = xEnd;
+            }
+        }
+        return arrows;
     }
 }
 
