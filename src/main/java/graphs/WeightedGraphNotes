@@ -1,0 +1,30 @@
+//------------Notes-------------------//
+
+The Bellman–Ford algorithm is an algorithm that computes the shortest path from a single source vertex to all the other vertices in a weighted digraph.
+It is slower than Dijkstra's algorithm for the same problem, but more versatile, as it is capable of handling graphs in which some edge weights are negative numbers.
+Like Dijkstra's algorithm, Bellman–Ford proceeds by relaxation, in which approximations to the correct distance are replaced by better ones until they eventually reach the solution.
+
+(Dijkstra's algorithm): uses a "Priority Queue" to "greedily" select the closest vertex that has not yet been processed,
+and performs this relaxation process on all of its outgoing edges;
+by contrast, the Bellman–Ford algorithm simply relaxes all the edges, and does this {|V|-1} times, where {|V|} is
+the number of vertices in the graph.
+
+(Bellman–Ford algorithm): Since the longest possible path without a cycle can be {|V|-1} edges, the edges must be scanned {|V|-1} times to ensure the shortest path has been found for all nodes.
+A final scan of all the edges is performed and if any distance is updated, then a path of length {|V|} edges has been found which can only occur if at least one negative cycle exists in the graph.
+A common improvement when implementing the algorithm is to return early when an iteration of step 2 fails to relax any edges, which implies all shortest paths have been found, and therefore there are no negative cycles.
+The algorithm works by relaxing edges in the graph, meaning that it tries to improve the shortest path estimate for each node in the graph until the solution is found.
+
+The (Shortest Path Faster Algorithm): (SPFA) is an improved version of the Bellman–Ford algorithm that computes single source shortest paths in a weighted directed graph.
+The algorithm works well on sparse random graphs, especially those that contain negative-weight edges.
+
+SPFA is similar to the Bellman-Ford algorithm in that each vertex is used as a candidate to relax its adjacent vertices.
+However, instead of trying all vertices blindly, SPFA maintains a queue of candidate vertices
+and adds a vertex to the queue only if that vertex is relaxed, repeating the process until no more vertices can be relaxed.
+
+The key is maintaining a running maximum probability for each node, and using this maximum to calculate the probabilities for its neighbors.
+If the probability of traveling from the starting node to a neighbor node through a specific edge is greater than the current maximum probability for that neighbor, we update the maximum probability of this neighbor node, and add this neighbor node to the queue.
+We only update the probability of reaching a neighbor node, say nxt_node and add it back to queue if the current path increases the probability of reaching nxt_node
+from the starting node. Moreover, the weight (probability) of each path is less than or equal to 1. Therefore, even if the graph contains a cycle, the product of the probabilities of all edges in the cycle is still less than or equal to 1.
+Since loops do not increase the probability of reaching a node, paths that contain loops will be excluded from consideration and not added to the queue.
+
+
