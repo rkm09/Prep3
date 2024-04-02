@@ -27,4 +27,11 @@ We only update the probability of reaching a neighbor node, say nxt_node and add
 from the starting node. Moreover, the weight (probability) of each path is less than or equal to 1. Therefore, even if the graph contains a cycle, the product of the probabilities of all edges in the cycle is still less than or equal to 1.
 Since loops do not increase the probability of reaching a node, paths that contain loops will be excluded from consideration and not added to the queue.
 
-
+(Dijkstra's algorithm):
+In BFS, we explore the graph in a breadth-first manner, which may not always lead to the shortest path.
+This is because BFS does not take into account the weights of the edges and only considers the number of hops.
+In contrast, Dijkstra's algorithm takes into account the weights of the edges and always guarantees to find the highest probability
+from the source node to any other node in the graph. This is where Dijkstra's algorithm becomes more suitable than BFS, as it takes into account the weights (probabilities) of the edges
+and can find the path with the highest probability of reaching the end node.
+In order to always select the node with the highest reaching probability, we use a priority queue pq to store the nodes to visit,
+where the node with the highest probability of being reached from the starting node has the highest priority.

@@ -11,7 +11,7 @@ public class PathWithMaxProbability1514 {
 //        double[] succProb = {0.5,0.5,0.2};
         int[][] edges = {{0,1},{1,2},{0,2},{1,3},{2,3}};
         double[] succProb = {0.8,0.8,0.3,1,1};
-        System.out.println(maxProbability(4,edges,succProb,0,2));
+        System.out.println(maxProbability2(4,edges,succProb,0,2));
     }
 
 //    bellman-ford; time: O(m.n), space: O(n) [n nodes, m edges] [faster at runtime ;), though ideally this should be slower]
@@ -70,6 +70,7 @@ public class PathWithMaxProbability1514 {
     }
 
 //    dijikstra's algorithm; time: O(m + nlogn), space: O(n + m) [faster than spfa]
+//    O(m + nlogn) -> fibonacci heap & O(n + mlogn) -> binary heap
     public static double maxProbability2(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
         Map<Integer, List<Pair<Integer, Double>>> graph = new HashMap<>();
         for(int i = 0 ; i < edges.length ; i++) {
