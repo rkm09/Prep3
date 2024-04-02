@@ -7,12 +7,14 @@ import java.util.*;
 
 public class PathWithMaxProbability1514 {
     public static void main(String[] args) {
-        int[][] edges = {{0,1},{1,2},{0,2}};
-        double[] succProb = {0.5,0.5,0.2};
-        System.out.println(maxProbability(3,edges,succProb,0,2));
+//        int[][] edges = {{0,1},{1,2},{0,2}};
+//        double[] succProb = {0.5,0.5,0.2};
+        int[][] edges = {{0,1},{1,2},{0,2},{1,3},{2,3}};
+        double[] succProb = {0.8,0.8,0.3,1,1};
+        System.out.println(maxProbability(4,edges,succProb,0,2));
     }
 
-//    bellman-ford; time: O(m.n), space: O(n) [n nodes, m edges]
+//    bellman-ford; time: O(m.n), space: O(n) [n nodes, m edges] [faster at runtime ;), though ideally this should be slower]
     public static double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
         double[] maxProb = new double[n];
         maxProb[start_node] = 1.0;
@@ -37,7 +39,7 @@ public class PathWithMaxProbability1514 {
         return maxProb[end_node];
     }
 
-//    shortest path faster (spfa); time: O(n.m) [only in the worst case], space: O(n + m)
+//    shortest path faster (spfa); time: O(n.m) [only in the worst case], space: O(n + m) [slowest]
     public static double maxProbability1(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
         Map<Integer, List<Pair<Integer, Double>>> graph = new HashMap<>();
         for(int i = 0 ; i < edges.length ; i++) {
@@ -65,6 +67,42 @@ public class PathWithMaxProbability1514 {
         }
 
         return maxProb[end_node];
+    }
+
+//    dijikstra's algorithm; time: O(m + nlogn), space: O(n + m) [faster than spfa]
+    public static double maxProbability2(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
+        Map<Integer, List<Pair<Integer, Double>>> graph = new HashMap<>();
+        for(int i = 0 ; i < edges.length ; i++) {
+            int u = edges[i][0], v = edges[i][1];
+            double pathProb = succProb[i];
+            graph.computeIfAbsent(u, k -> new ArrayList<>()).add(new Pair<>(v, pathProb));
+            graph.computeIfAbsent(v, k -> new ArrayList<>()).add(new Pair<>(u, pathProb));
+        }
+        double[] maxProb = new double[n];
+        maxProb[start_node] = 1d;
+
+//        descending priority; preference for greater probability value
+        PriorityQueue<Pair<Double, Integer>> pq = new PriorityQueue<>((a,b) -> - Double.compare(a.getKey(), b.getKey()));
+        pq.offer(new Pair<>(1.0, start_node));
+
+        while(!pq.isEmpty()) {
+            Pair<Double, Integer> pair = pq.poll();
+            int currNode = pair.getValue();
+            double currProb = pair.getKey();
+
+            if(currNode == end_node)
+                return currProb;
+
+            for(Pair<Integer, Double> neighbour : graph.getOrDefault(currNode, new ArrayList<>())) {
+                int nextNode = neighbour.getKey();
+                double nextProb = neighbour.getValue();
+                if(maxProb[currNode] * nextProb > maxProb[nextNode]) {
+                    maxProb[nextNode] = nextProb * maxProb[currNode];
+                    pq.offer(new Pair<>(maxProb[nextNode], nextNode));
+                }
+            }
+        }
+        return 0d;
     }
 }
 
