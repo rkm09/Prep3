@@ -40,7 +40,7 @@ public class ReverseWords151 {
         StringBuilder word = new StringBuilder();
         while(left <= right) {
             char c = s.charAt(left);
-//            push word by word in front of the deque
+//            push word by word in front of the deque [stack operation]
             if((word.length() != 0) && (c == ' ')) {
                 stack.push(word.toString());
                 word.setLength(0);
