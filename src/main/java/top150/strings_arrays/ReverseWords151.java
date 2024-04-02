@@ -79,13 +79,13 @@ public class ReverseWords151 {
         int n = sb.length();
         int start = 0, end = 0;
         while(start < n) {
-//            get to the end of the word
+//            go to the end of the word
             while(end < n && sb.charAt(end) != ' ') end++;
 //           reverse the word
             reverse(sb, start, end - 1);
-//           set the start pointer to point to next word
+//           set the start pointer to point to the next word
             start = end + 1;
-//            move end pointer to also point to next word
+//            move end pointer to also point to the next word
             end++;
         }
     }
