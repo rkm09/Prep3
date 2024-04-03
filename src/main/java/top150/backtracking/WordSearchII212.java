@@ -10,15 +10,21 @@ public class WordSearchII212 {
 
     public static void main(String[] args) {
         WordSearchII212 ws = new WordSearchII212();
-        char[][] board = {{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}};
-        String[] words = {"oath","pea","eat","rain"};
+//        char[][] board = {{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}};
+//        String[] words = {"oath","pea","eat","rain"};
+        char[][] board = {{'A','B','C','E'},{'S','F','C','S'},{'A','D','E','E'}};
+        String[] words = {"ABCCED"};
         System.out.println(ws.findWords(board, words));
     }
+
     public List<String> findWords(char[][] board, String[] words) {
         List<String> result = new ArrayList<>();
 
         return result;
     }
+
+
+//    note: the generic way as described in word search 79, will lead to TLE here.
 }
 
 /*
