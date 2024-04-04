@@ -35,3 +35,44 @@ from the source node to any other node in the graph. This is where Dijkstra's al
 and can find the path with the highest probability of reaching the end node.
 In order to always select the node with the highest reaching probability, we use a priority queue pq to store the nodes to visit,
 where the node with the highest probability of being reached from the starting node has the highest priority.
+
+
+// ---------------------Notes on Minimum Spanning Tree----------------------//
+
+A minimum spanning tree (MST) or minimum weight spanning tree is a subset of the edges of a connected, edge-weighted undirected graph
+that connects all the vertices together, without any cycles and with the minimum possible total edge weight.
+
+Algorithms: Prim's, Kruskal's; both are greedy algorithms.
+
+Kruskal's:
+The key steps of the algorithm are sorting and the use of a disjoint-set data structure to detect cycles.
+Its running time is dominated by the time to sort all of the graph edges by their weight.
+
+//----notes on DSU----//
+Path compression in union find makes it faster:
+While obtaining the root, we compress the path by assigning the grandparent of the node as the parent (thereby skipping connections and moving nodes closer to the root).
+
+In an efficient implementation, tree height is controlled using union by size or union by rank.
+Both of these require a node to store information besides just its parent pointer. This information is used to decide which root
+becomes the new parent. Both strategies ensure that trees do not become too deep.
+
+Union by size:
+In the case of union by size, a node stores its size, which is simply its number of descendants (including the node itself).
+When the trees with roots x and y are merged, the node with more descendants becomes the parent.
+
+Union by rank:
+A node stores its rank, which is an upper bound for its height. When a node is initialized, its rank is set to zero.
+To merge trees with roots x and y, first compare their ranks. If the ranks are different, then the larger rank tree becomes the
+parent, and the ranks of x and y do not change.
+
+It is clear from the implementations that the size and rank of a node do not matter unless a node is the root of a tree.
+Once a node becomes a child, its size and rank are never accessed again.
+
+Every node has rank O(log n) or less. Consequently, each rank can be stored in O(log log n) bits and all the ranks can be stored in O(n log log n) bits.
+This makes the ranks an asymptotically negligible portion of the forest's size.
+
+Time Complexity of DSU:
+O(M log* N) where log* denotes the iterated logarithm (extremely slow-growing inverse Ackermann function). It is the number of times the logarithm function
+must be iteratively applied before the result is less than or equal to 1.
+
+
