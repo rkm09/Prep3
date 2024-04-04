@@ -16,7 +16,7 @@ public class KthSmallest230 {
         TreeNode root = new TreeNode(3, left, right);
         TreeNode r1 = new TreeNode(2);
         TreeNode root1 = new TreeNode(1, null, r1);
-        System.out.println(kthSmallest1(root1, 2));
+        System.out.println(kthSmallest1(root, 2));
     }
 
 //    recursive inorder traversal; time: O(n), space: O(n)
