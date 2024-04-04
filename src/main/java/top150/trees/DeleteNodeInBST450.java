@@ -4,15 +4,55 @@ import common.TreeNode;
 
 public class DeleteNodeInBST450 {
     public static void main(String[] args) {
-        TreeNode right = new TreeNode(7);
-        TreeNode left1 = new TreeNode(3);
-        TreeNode left2 = new TreeNode(3);
-        TreeNode left = new TreeNode(2, left1, left2);
-        TreeNode root = new TreeNode(4, left, right);
-        TreeNode node = deleteNode(root, 2);
+        TreeNode right2 = new TreeNode(7);
+        TreeNode right = new TreeNode(6, null, right2);
+        TreeNode left1 = new TreeNode(2);
+        TreeNode left2 = new TreeNode(4);
+        TreeNode left = new TreeNode(3, left1, left2);
+        TreeNode root = new TreeNode(5, left, right);
+        TreeNode node = deleteNode(root, 3);
     }
-    public static TreeNode deleteNode(TreeNode root, int key) {
 
+//    recursion; time: O(H), space: O(H) [H is the height of the tree, O(logN) for a balanced tree]
+    public static TreeNode deleteNode(TreeNode root, int key) {
+        if(root == null) return null;
+//        if val is greater, then delete from right subTree
+        if(root.val < key)
+            root.right = deleteNode(root.right, key);
+//        else if val is smaller, delete from left subTree
+        else if(root.val > key)
+            root.left = deleteNode(root.left, key);
+        else {
+//            else if val is equal to target, delete it
+            if(root.left == null && root.right == null)
+                root = null;
+            else if(root.right != null) {
+//                if right subTree exists, replace with successor
+                root.val = successor(root);
+                root.right = deleteNode(root.right, root.val);
+            } else if(root.left != null) {
+//                or else if left subTree exists, replace with predecessor
+                root.val = predecessor(root);
+                root.left = deleteNode(root.left, root.val);
+            }
+        }
+        return root;
+    }
+
+//    first right and then left as much as possible
+    private static Integer successor(TreeNode node) {
+        node = node.right;
+        while(node.left != null)
+            node = node.left;
+        return node.val;
+    }
+
+//    first left and then right as much as possible
+    private static Integer predecessor(TreeNode node) {
+        node = node.left;
+        while(node.right != null)
+            node = node.right;
+        return node.val;
     }
 }
 
