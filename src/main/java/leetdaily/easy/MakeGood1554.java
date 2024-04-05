@@ -9,8 +9,24 @@ public class MakeGood1554 {
         System.out.println(makeGood(s));
     }
 
-//    [def]; using stack; time: O(n), space: O(n)
+//    using stack; time: O(n), space: O(n)
     public static String makeGood(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        for(Character c : s.toCharArray()) {
+            if(!stack.isEmpty() && Math.abs(stack.peek() - c) == 32)
+                stack.pop();
+            else
+                stack.push(c);
+        }
+        StringBuilder sb = new StringBuilder();
+        while(!stack.isEmpty()) {
+            sb.append(stack.pollLast());
+        }
+        return sb.toString();
+    }
+
+//    [def]; using stack; time: O(n), space: O(n) [slow]
+    public static String makeGood1(String s) {
         Deque<String> stack = new ArrayDeque<>();
         String[] arr = s.split("");
         for(String str : arr) {
@@ -28,6 +44,40 @@ public class MakeGood1554 {
         }
         return sb.toString();
     }
+
+//    iteration; time: O(n^2), space: O(n)
+    public static String makeGood2(String s) {
+        StringBuilder newStr = new StringBuilder(s);
+        while(newStr.length() > 1) {
+            boolean found = false;
+            for(int i = 0 ; i < newStr.length() - 1 ; i++) {
+                char currChar = newStr.charAt(i);
+                char nextChar = newStr.charAt(i + 1);
+                if(Math.abs(currChar - nextChar) == 32) {
+                    newStr.deleteCharAt(i);
+                    newStr.deleteCharAt(i);
+                    found = true;
+                    break;
+                }
+            }
+//            break the loop if no more changes required
+            if(!found)
+                break;
+        }
+        return newStr.toString();
+    }
+
+//    recursion; time: O(n^2), space: O(n^2) [space is proportional to the maximum depth of the recursion tree (upto n/2 pairs -> O(n) plus each function takes O(n) space)]
+    public static String makeGood3(String s) {
+//        if we find a pair in s, remove this pair and solve the remaining recursively
+        for(int i = 0 ; i < s.length() - 1 ; i++) {
+            if(Math.abs(s.charAt(i) - s.charAt(i + 1)) == 32)
+                return makeGood3(s.substring(0, i) + s.substring(i + 2));
+        }
+//        base case: if we can't find a pair just return s;
+        return s;
+    }
+
 }
 
 /*
