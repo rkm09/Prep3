@@ -25,38 +25,20 @@ public class MakeGood1554 {
         return sb.toString();
     }
 
-//    [def]; using stack; time: O(n), space: O(n) [slow]
-    public static String makeGood1(String s) {
-        Deque<String> stack = new ArrayDeque<>();
-        String[] arr = s.split("");
-        for(String str : arr) {
-            if(!stack.isEmpty() && stack.peek().equalsIgnoreCase(str)) {
-                if(!stack.peek().equals(str)) {
-                    stack.pop();
-                    continue;
-                }
-            }
-            stack.push(str);
-        }
-        StringBuilder sb = new StringBuilder();
-        while(!stack.isEmpty()) {
-            sb.append(stack.pollLast());
-        }
-        return sb.toString();
-    }
-
 //    iteration; time: O(n^2), space: O(n)
     public static String makeGood2(String s) {
         StringBuilder newStr = new StringBuilder(s);
         while(newStr.length() > 1) {
             boolean found = false;
             for(int i = 0 ; i < newStr.length() - 1 ; i++) {
+//                everything wrt the builder
                 char currChar = newStr.charAt(i);
                 char nextChar = newStr.charAt(i + 1);
                 if(Math.abs(currChar - nextChar) == 32) {
                     newStr.deleteCharAt(i);
                     newStr.deleteCharAt(i);
                     found = true;
+//                  important step, since reshuffling has happened
                     break;
                 }
             }
@@ -78,6 +60,25 @@ public class MakeGood1554 {
         return s;
     }
 
+    //    [def]; using stack; time: O(n), space: O(n) [slowest]
+    public static String makeGood1(String s) {
+        Deque<String> stack = new ArrayDeque<>();
+        String[] arr = s.split("");
+        for(String str : arr) {
+            if(!stack.isEmpty() && stack.peek().equalsIgnoreCase(str)) {
+                if(!stack.peek().equals(str)) {
+                    stack.pop();
+                    continue;
+                }
+            }
+            stack.push(str);
+        }
+        StringBuilder sb = new StringBuilder();
+        while(!stack.isEmpty()) {
+            sb.append(stack.pollLast());
+        }
+        return sb.toString();
+    }
 }
 
 /*
