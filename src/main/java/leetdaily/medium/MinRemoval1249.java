@@ -2,6 +2,8 @@ package leetdaily.medium;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MinRemoval1249 {
     public static void main(String[] args) {
@@ -10,8 +12,8 @@ public class MinRemoval1249 {
         System.out.println(minRemoveToMakeValid(s1));
     }
 
-//    stack[def]; time: O(n), space: O(n)
-    public static String minRemoveToMakeValid(String s) {
+//    stack[def]; time: O(n), space: O(n) [fastest]
+    public static String minRemoveToMakeValid2(String s) {
         Deque<Character> stack = new ArrayDeque<>();
         StringBuilder sb = new StringBuilder(s);
         int index = 0;
@@ -32,6 +34,65 @@ public class MinRemoval1249 {
         }
         return sb.toString();
     }
+
+//    two pass string builder; time: O(n), space: O(n)
+    public static String minRemoveToMakeValid(String s) {
+        StringBuilder sb = new StringBuilder();
+        int openToKeep = 0, balance = 0;
+//        pass 1: remove invalid ')'
+        for(int i = 0 ; i < s.length() ; i++) {
+            char c = s.charAt(i);
+            if(c == '(') {
+                openToKeep++;
+                balance++;
+            } else if(c == ')') {
+                if(balance == 0) continue;
+                balance--;
+            }
+            sb.append(c);
+        }
+
+//        pass 2: remove invalid '('
+        StringBuilder result = new StringBuilder();
+        openToKeep = openToKeep - balance;
+        for(int i = 0 ; i < sb.length() ; i++) {
+            char c = sb.charAt(i);
+            if(c == '(') {
+                openToKeep--;
+                if(openToKeep < 0) continue;
+            }
+            result.append(c);
+        }
+        return result.toString();
+    }
+
+//    stack; time: O(n), space: O(n)
+    public static String minRemoveToMakeValid1(String s) {
+        Set<Integer> indexesToRemove = new HashSet<>();
+        Deque<Integer> stack = new ArrayDeque<>();
+        for(int i = 0 ; i < s.length() ; i++) {
+            char c = s.charAt(i);
+            if(c == '(')
+                stack.push(i);
+            else if(c == ')') {
+                if(!stack.isEmpty())
+                    stack.pop();
+                else
+                    indexesToRemove.add(i);
+            }
+        }
+//        add any remaining ( to set;
+        while(!stack.isEmpty()) indexesToRemove.add(stack.pop());
+
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0 ; i < s.length() ; i++) {
+            if(!indexesToRemove.contains(i))
+                sb.append(s.charAt(i));
+        }
+        return sb.toString();
+    }
+
+
 }
 
 /*
