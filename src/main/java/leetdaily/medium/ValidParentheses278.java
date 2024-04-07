@@ -8,8 +8,30 @@ public class ValidParentheses278 {
         System.out.println(checkValidString(s));
     }
 
-//    two stacks; time: O(n), space: O(n)
+//    greedy two pointer; time: O(n), space: O(1)
     public static boolean checkValidString(String s) {
+        int openBrackets = 0, closeBrackets = 0;
+        int length = s.length() - 1;
+        for(int i = 0 ; i <= length ; i++) {
+//            count open parenthesis or '*'
+            if(s.charAt(i) == '(' || s.charAt(i) == '*')
+                openBrackets++;
+            else
+                openBrackets--;
+//            count close parenthesis or '*
+            if(s.charAt(length - i) == ')' || s.charAt(length- i) == '*')
+                closeBrackets++;
+            else
+                closeBrackets--;
+//            if any of them turns negative string is invalid
+            if(openBrackets < 0 || closeBrackets < 0)
+                return false;
+        }
+        return true;
+    }
+
+//    two stacks; time: O(n), space: O(n)
+    public static boolean checkValidString1(String s) {
         Deque<Integer> starIndex = new ArrayDeque<>();
         Deque<Integer> stack = new ArrayDeque<>();
         for(int i = 0 ; i < s.length() ; i++) {
