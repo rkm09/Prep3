@@ -20,8 +20,13 @@ public class MedianOfSorted4 {
         return 0.0;
     }
 
-//    linear merge (recursion) [def]; time: O(n), space: O(n)
+//    merge sort; time: O(m + n), space: O(1)
     public  double findMedianSortedArrays1(int[] nums1, int[] nums2) {
+        return 0.0;
+    }
+
+//    linear merge (recursion) [def]; time: O(m + n), space: O(n)
+    public  double findMedianSortedArrays2(int[] nums1, int[] nums2) {
         this.nums1 = nums1;
         this.nums2 = nums2;
         result = new ArrayList<>();
