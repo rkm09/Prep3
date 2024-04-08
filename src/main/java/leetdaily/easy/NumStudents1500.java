@@ -12,20 +12,20 @@ public class NumStudents1500 {
 
 //    [def];
     public static int countStudents(int[] students, int[] sandwiches) {
-        Deque<Integer> queue = new ArrayDeque<>();
-        int count = students.length, i = 0;
-        int n = count * 4;
+        Deque<Integer> studentQueue = new ArrayDeque<>();
+        int i = 0, lastServed = 0;
         for(int student : students)
-            queue.offer(student);
-        while(!queue.isEmpty() && n-- > 0) {
-            int student = queue.poll();
+            studentQueue.offer(student);
+        while(!studentQueue.isEmpty() && lastServed < studentQueue.size()) {
+            int student = studentQueue.poll();
             if(sandwiches[i] != student) {
-                queue.addLast(student);
+                studentQueue.addLast(student);
+                lastServed++;
             } else {
-                count--; i++;
+                i++; lastServed = 0;
             }
         }
-        return count;
+        return studentQueue.size();
     }
 }
 
