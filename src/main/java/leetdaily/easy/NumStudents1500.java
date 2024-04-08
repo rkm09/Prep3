@@ -10,8 +10,31 @@ public class NumStudents1500 {
         System.out.println(countStudents(students, sandwiches));
     }
 
-//    [def];
+//    counting; time: O(n + m), space: O(1)
     public static int countStudents(int[] students, int[] sandwiches) {
+        int circleStudentCount = 0, squareSandwichCount = 0;
+        for(int student : students) {
+            if(student == 0)
+                circleStudentCount++;
+            else
+                squareSandwichCount++;
+        }
+        for(int sandwich : sandwiches) {
+            if(sandwich == 0 && circleStudentCount == 0)
+                return squareSandwichCount;
+            if(sandwich == 1 && squareSandwichCount == 0)
+                return circleStudentCount;
+            if(sandwich == 0) {
+                circleStudentCount--;
+            } else {
+                squareSandwichCount--;
+            }
+        }
+        return 0;
+    }
+
+//    queue; time: O(n + m), space: O(n) [n - students, m - sandwiches]
+    public static int countStudents1(int[] students, int[] sandwiches) {
         Deque<Integer> studentQueue = new ArrayDeque<>();
         int i = 0, lastServed = 0;
         for(int student : students)
