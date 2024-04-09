@@ -13,6 +13,7 @@ public class TimeNeeded2073 {
         for(int i = 0 ; i < tickets.length ; i++) {
             if(tickets[i] >= tickets[k]) {
                 time += tickets[k];
+//                to account for the last round in which case the ones standing later in the queue will not get a chance
                 if(i > k) n++;
             }
             else time += tickets[i];
