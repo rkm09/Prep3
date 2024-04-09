@@ -13,13 +13,43 @@ public class SortList148 {
         System.out.println(sortList(head).val);
     }
 
-//    Merge sort; time: O(nlogn), space: O(logn)
+//    Merge sort (top down recursion)[fast]; time: O(nlogn), space: O(logn) [log2n is the height of the tree(split function is in a way a binary tree)]
+//    follows divide & conquer; split + merge
     public static ListNode sortList(ListNode head) {
-        return head;
+        if(head == null || head.next == null)
+            return head;
+        ListNode mid = getMid(head);
+//        after the getMid function call, head is now modified to end before the mid;
+        ListNode left = sortList(head);
+        ListNode right = sortList(mid);
+        return merge(left, right);
+    }
+
+    private static ListNode merge(ListNode list1, ListNode list2) {
+        if(list1 == null) return list2;
+        if(list2 == null) return list1;
+        if(list1.val <= list2.val) {
+            list1.next = merge(list1.next, list2);
+            return list1;
+        } else {
+            list2.next = merge(list1, list2.next);
+            return list2;
+        }
+    }
+
+    private static ListNode getMid(ListNode head) {
+        ListNode midPrev = null;
+        while(head != null && head.next != null) {
+            midPrev = (midPrev == null) ? head : midPrev.next;
+            head = head.next.next;
+        }
+        ListNode mid = midPrev.next;
+        midPrev.next = null;
+        return mid;
     }
 
 //    pq[def]; time: O(nlogn), space: O(n)
-//    note: follow up asks for constant space; so not really applicable
+//    note: follow-up asks for constant space; so not really applicable
     public static ListNode sortList2(ListNode head) {
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         ListNode node = head;
