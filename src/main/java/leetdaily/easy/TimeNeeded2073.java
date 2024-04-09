@@ -1,25 +1,64 @@
 package leetdaily.easy;
 
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class TimeNeeded2073 {
     public static void main(String[] args) {
         int[] tickets = {2,3,2};
         System.out.println(timeRequiredToBuy(tickets, 2));
     }
 
-//    [def]; time: O(n), space: O(1)
     public static int timeRequiredToBuy(int[] tickets, int k) {
+        int time = 0;
+        for(int i = 0 ; i < tickets.length ; i++) {
+//            position perspective
+            if(i <= k) {
+                time += Math.min(tickets[i], tickets[k]);
+            } else {
+//                to account for last round
+                time += Math.min(tickets[k] - 1, tickets[i]);
+            }
+        }
+        return time;
+    }
+
+//    [def]; time: O(n), space: O(1)
+    public static int timeRequiredToBuy1(int[] tickets, int k) {
         int time = 0, n = 0;
         for(int i = 0 ; i < tickets.length ; i++) {
+//            based on value
             if(tickets[i] >= tickets[k]) {
                 time += tickets[k];
-//                to account for the last round in which case the ones standing later in the queue will not get a chance
+//            (position perspective) account for the last round in which case the ones standing later in the queue will not get a chance
                 if(i > k) n++;
             }
             else time += tickets[i];
         }
         return time - n;
     }
+
+//    brute force using queue; time: "O(n.m)" [in the worst case all tickets will have the maximum number of tickets], space: O(n)
+//    listed for completeness' sake
+    public static int timeRequiredToBuy2(int[] tickets, int k) {
+        Deque<Integer> queue = new ArrayDeque<>();
+        int time = 0;
+        for(int i = 0 ; i < tickets.length ; i++)
+            queue.offer(i);
+
+        while(!queue.isEmpty()) {
+            time++;
+            int front = queue.poll();
+            tickets[front]--;
+            if(front == k && tickets[k] == 0)
+                return time;
+            if(tickets[front] != 0)
+                queue.offer(front);
+        }
+        return time;
+    }
+
 }
 
 /*
