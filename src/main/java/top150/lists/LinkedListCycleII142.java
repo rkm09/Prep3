@@ -51,7 +51,7 @@ public class LinkedListCycleII142 {
             hare = hare.next;
             tortoise = tortoise.next;
         }
-//        return where the cyle begins
+//        return where the cycle begins
         return tortoise;
     }
 }

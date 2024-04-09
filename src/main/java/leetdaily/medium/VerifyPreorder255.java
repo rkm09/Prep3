@@ -23,8 +23,8 @@ public class VerifyPreorder255 {
         int minLimit = Integer.MIN_VALUE;
         Deque<Integer> stack = new ArrayDeque<>();
         for(int num : preorder) {
-            while(!stack.isEmpty() && stack.peek() < num) {
-//                get to the parent, no need to keep track of the processed left subTree
+            while(!stack.isEmpty() && num > stack.peek()) {
+//                get to the parent(backtrack), no need to keep track of the processed left subTree
                 minLimit = stack.pop();
             }
 //            less than parent after traversing entire left subTree => invalid
@@ -36,23 +36,48 @@ public class VerifyPreorder255 {
         return true;
     }
 
-//    constant auxiliary space; time: O(n), space: O(1)
+//    constant auxiliary space; time: O(n), space: O(1) auxiliary space
+//    in general, in-place modification to be avoided, included here only because of the follow-up question
     public static boolean verifyPreorder1(int[] preorder) {
         int minLimit = Integer.MIN_VALUE;
         int i = 0;
         for(int num : preorder) {
-            while(i > 0 && preorder[i - 1] < num) {
+//            preorder[i - 1] represents current stack top;
+            while(i > 0 && num > preorder[i - 1]) {
                 minLimit = preorder[i - 1];
+//                to remove an element we simply decrement i;
                 i--;
             }
 
             if(num <= minLimit)
                 return false;
 
+//            push num onto the stack by setting and incrementing
             preorder[i] = num;
             i++;
         }
         return true;
+    }
+
+//    recursion; time: O(n), space: O(n)
+//    The thing that makes this solution very unintuitive is that i is shared between all function calls - i.e., it acts as a global variable. This is inconsistent with recursive solutions where each function call stores its own state.
+//    The reason for this is that we need to process the nodes of preorder in the same order that they appear in the input.
+//    If the sequence is invalid, all calls will eventually end up failing the BST condition check.
+    public static boolean verifyPreorder2(int[] preorder) {
+        return helper(preorder, new int[]{0}, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+    private static boolean helper(int[] preorder, int[] i, int minLimit, int maxLimit) {
+        if(i[0] == preorder.length)
+            return true;
+//        validation check
+        int root = preorder[i[0]];
+        if(root <= minLimit || root >= maxLimit)
+            return false;
+        i[0]++;
+        boolean left = helper(preorder, i, minLimit, root);
+        boolean right = helper(preorder, i, root, maxLimit);
+
+        return left || right;
     }
 }
 
