@@ -5,14 +5,14 @@ import java.util.Deque;
 
 public class RotateArray189 {
     public static void main(String[] args) {
-        int[] nums = {1,2,3,4,5,6,7};
-        rotate(nums, 3);
+        int[] nums = {1,2,3,4,5,6};
+        rotate1(nums, 2);
     }
 
-//    reverse; time: O(n), space: O(1)
+//    reverse; time: O(n), space: O(1) [fastest]
     public static void rotate(int[] nums, int k) {
         int n = nums.length - 1;
-//        one full iteration would lead to the same place; so ensure you take the mod;
+//        rotations follow cyclical order; so ensure you take the mod;
         k %= nums.length;
         reverse(nums, 0, n);
         reverse(nums, 0, k - 1);
@@ -25,6 +25,40 @@ public class RotateArray189 {
             nums[start] = nums[end];
             nums[end] = temp;
             start++; end--;
+        }
+    }
+
+//    cyclic replacement; time: O(n), space: O(1) // an improvement in space with logic being similar to the next
+//    when we hit the original number's index again, we start the same process with the number following it.
+//    When we reach back the original index, we have placed n/k elements at their correct position;
+//    k * n/k = n happens after k cycles whereby i % k == 0;
+    public static void rotate1(int[] nums, int k) {
+        int n = nums.length;
+        k %= n;
+        int count = 0;
+        for(int start = 0 ; count < n ; start++) {
+            int current = start;
+            int prev = nums[start];
+            do {
+                int next = (current + k) % n;
+                int temp = nums[next];
+                nums[next] = prev;
+                prev = temp;
+                current = next;
+                count++;
+            } while(start != current);
+        }
+    }
+
+//    using aux array; place elements at the right index; time: O(n), space: O(n)
+    public static void rotate2(int[] nums, int k) {
+        int n = nums.length;
+        int[] aux = new int[n];
+        for(int i = 0 ; i < n ; i++) {
+            aux[(i + k) % n] = nums[i];
+        }
+        for(int i = 0 ; i < n ; i++) {
+            nums[i] = aux[i];
         }
     }
 
