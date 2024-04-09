@@ -7,6 +7,7 @@ public class MedianOfSorted4 {
     private int[] nums1;
     private int[] nums2;
     private List<Integer> result;
+    private int p1, p2;
     public static void main(String[] args) {
         int[] nums1 = {1, 2};
         int[] nums2 = {3, 4};
@@ -21,8 +22,27 @@ public class MedianOfSorted4 {
     }
 
 //    merge sort; time: O(m + n), space: O(1)
+//    already sorted input, don't need to really merge the array entirely, just get to that point and return;
     public  double findMedianSortedArrays1(int[] nums1, int[] nums2) {
-        return 0.0;
+        this.nums1 = nums1; this.nums2 = nums2;
+        int m = nums1.length, n = nums2.length;
+        if((m + n) % 2 == 0) {
+            for(int i = 0 ; i < (m + n) / 2 - 1 ; i++) getMin();
+            return (double) (getMin() + getMin()) / 2;
+        } else {
+            for(int i = 0 ; i < (m + n) / 2 ; i++) getMin();
+            return getMin();
+        }
+    }
+
+    private int getMin() {
+        if(p1 < nums1.length && p2 < nums2.length)
+            return nums1[p1] < nums2[p2] ? nums1[p1++] : nums2[p2++];
+        if(p1 < nums1.length)
+            return nums1[p1++];
+        if(p2 < nums2.length)
+            return nums2[p2++];
+        return -1;
     }
 
 //    linear merge (recursion) [def]; time: O(m + n), space: O(n)
