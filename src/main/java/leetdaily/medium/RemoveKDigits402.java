@@ -5,8 +5,8 @@ import java.util.Deque;
 
 public class RemoveKDigits402 {
     public static void main(String[] args) {
-        String num = "1432219";
-        System.out.println(removeKdigits(num, 3));
+        String num = "112";
+        System.out.println(removeKdigits(num, 1));
     }
 
 //    given two number sequences, it is the leftmost 'distinct' digit which determines the superior of the two. 1axx, 1bxx
@@ -20,8 +20,9 @@ public class RemoveKDigits402 {
             }
             stack.push(c);
         }
+//        remove from the tail, the ones which did not violate the above condition (since msb has already been verified)
         while(k > 0 && !stack.isEmpty()) {
-            stack.removeLast();
+            stack.pop();
             k--;
         }
 
@@ -30,7 +31,7 @@ public class RemoveKDigits402 {
         while(!stack.isEmpty()) {
             char c = stack.removeLast();
             if(isLeadingZero &&  c == '0') continue;
-            isLeadingZero =  !isLeadingZero;
+            isLeadingZero =  false;
             sb.append(c);
         }
 
