@@ -9,7 +9,9 @@ public class MinCost1584 {
         System.out.println(m.minCostConnectPoints(points));
     }
 
-//    kruskal's; time: O(n^2logn), space:O(n)
+//    kruskal's algorithm (greedy); time: O(n^2logn), space:O(n^2) [n^2 edges of graph + n fo dsu => n^2]
+//    time complexity: build edge graph O(n^2) - > sorting this O(n^2logn^2) -> union find O(alpha(n)) where alpha(n) is inverse ackermann which is nearly constant even for large n.
+//    => O(n^2 + n^2logn^2 + n.alpha(n)) => O(n^2logn^2) => O(n^2logn)
     public int minCostConnectPoints(int[][] points) {
         int n = points.length;
         List<int[]> edges = new ArrayList<>();
@@ -38,7 +40,7 @@ public class MinCost1584 {
     private int distance(int[] point1, int[] point2) {
         return Math.abs(point1[0] - point2[0]) + Math.abs(point1[1] - point2[1]);
     }
-    
+
 }
 
 class UnionFind {

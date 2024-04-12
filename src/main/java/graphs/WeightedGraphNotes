@@ -45,6 +45,7 @@ that connects all the vertices together, without any cycles and with the minimum
 Algorithms: Prim's, Kruskal's; both are greedy algorithms.
 
 Kruskal's:
+____________
 The key steps of the algorithm are sorting and the use of a disjoint-set data structure to detect cycles.
 Its running time is dominated by the time to sort all of the graph edges by their weight.
 
@@ -74,5 +75,29 @@ This makes the ranks an asymptotically negligible portion of the forest's size.
 Time Complexity of DSU:
 O(M log* N) where log* denotes the iterated logarithm (extremely slow-growing inverse Ackermann function). It is the number of times the logarithm function
 must be iteratively applied before the result is less than or equal to 1.
+
+
+Prim's algorithm:
+__________________
+It is also a greedy algorithm for building a minimum spanning tree in a weighted and undirected graph.
+In this algorithm, we include an arbitrary node in the MST and keep on adding the lowest-weighted edges of the nodes present in the MST
+until all nodes are included in the MST and no cycles are formed.
+
+In this algorithm, we can pick any node to start with. Then we will choose the lowest-weighted edge that connects a node present
+in the MST to a node not present in the MST.
+
+We could keep all of the edges in an array and then sort them. But then, for each new node that we add to the MST, we would have to add the new node's edges to
+the array and sort the array again. This would be a costly operation when done repeatedly.
+
+A more efficient way to track which edges are available and which of these edges has the lowest weight is to use a "min-heap" data structure.
+A min-heap is a tree-like data structure that always stores the minimum valued element (edge weight here) at the root
+and where insertion and removal of elements (edges) take logarithmic time.
+
+Now, we know how to greedily pick the lowest-weighted edge, but how can we check if including an edge will form a cycle in the MST?
+we can use one boolean array to record which nodes are already present in the MST. If both of an edge's nodes are already present in the MST,
+we will discard the edge. Otherwise, we will include this edge and mark the newly added node as present in the MST.
+
+Since an MST can only have n - 1 edges, we can use it as an early exit condition to stop iterating over heap elements.
+
 
 
