@@ -3,11 +3,11 @@ package top150.strings_arrays;
 public class TrappingRainWater42 {
     public static void main(String[] args) {
         int[] heights = {0,1,0,2,1,0,1,3,2,1,2,1};
-        System.out.println(trap(heights));
+        System.out.println(trap1(heights));
     }
 
 //    dp; time: O(n), space: O(n)
-    public static int trap(int[] height) {
+    public static int trap1(int[] height) {
         int n = height.length, ans = 0;
         int[] leftMax = new int[n];
         leftMax[0] = height[0];
@@ -25,8 +25,33 @@ public class TrappingRainWater42 {
         return ans;
     }
 
+    //   using two pointer; time: O(n), space: O(1)
+    public static int trap(int[] height) {
+        int n = height.length;
+        int left = 0, right = n - 1, result = 0;
+        int leftMax = 0, rightMax = 0;
+        while(left < right) {
+            if(height[left] < height[right]) {
+                if(height[left] < leftMax)
+                    result += (leftMax - height[left]);
+                else
+                    leftMax = height[left];
+                left++;
+            } else {
+                if(height[right] < rightMax)
+                    result += (rightMax - height[right]);
+                else
+                    rightMax = height[right];
+                right--;
+            }
+
+        }
+        return result;
+    }
+
+    
 //    brute force; time: O(n^2), space: O(1)
-    public static int trap1(int[] height) {
+    public static int trap3(int[] height) {
         int n = height.length, ans = 0;
 //        note the first and the last need not be considered when standing at the 1st and last respectively, as there is no wall beyond them
         for(int i = 1 ; i < n - 1 ; i++) {
@@ -45,7 +70,7 @@ public class TrappingRainWater42 {
         }
         return ans;
     }
-    
+
 }
 
 /*
