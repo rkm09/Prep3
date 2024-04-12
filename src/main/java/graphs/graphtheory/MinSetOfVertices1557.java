@@ -14,7 +14,7 @@ public class MinSetOfVertices1557 {
         System.out.println(findSmallestSetOfVertices(6, edges));
     }
 
-//    [def]; time: O(n), space: O(n)
+//    [def]; time: O(n + e), space: O(n)
     public static List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
         int[] inDegree = new int[n];
         for(List<Integer> edge : edges) {
