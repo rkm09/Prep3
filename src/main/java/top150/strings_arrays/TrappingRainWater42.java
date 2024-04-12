@@ -7,7 +7,7 @@ public class TrappingRainWater42 {
     }
 
 //    dp; time: O(n), space: O(n)
-    public static int trap1(int[] height) {
+    public static int trap(int[] height) {
         int n = height.length, ans = 0;
         int[] leftMax = new int[n];
         leftMax[0] = height[0];
@@ -26,7 +26,7 @@ public class TrappingRainWater42 {
     }
 
     //   using two pointer; time: O(n), space: O(1)
-    public static int trap(int[] height) {
+    public static int trap1(int[] height) {
         int n = height.length;
         int left = 0, right = n - 1, result = 0;
         int leftMax = 0, rightMax = 0;
@@ -49,7 +49,7 @@ public class TrappingRainWater42 {
         return result;
     }
 
-    
+
 //    brute force; time: O(n^2), space: O(1)
     public static int trap3(int[] height) {
         int n = height.length, ans = 0;
