@@ -6,9 +6,6 @@ public class TrappingRainWater42 {
         System.out.println(trap(heights));
     }
 
-
-//    In brute force, we iterate over the left and right parts again and again just to find the highest bar size until that index.
-//    But, this could be stored. => DP
 //    dp; time: O(n), space: O(n)
     public static int trap(int[] height) {
         int n = height.length, ans = 0;
@@ -48,6 +45,7 @@ public class TrappingRainWater42 {
         }
         return ans;
     }
+    
 }
 
 /*
