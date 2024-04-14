@@ -13,11 +13,51 @@ public class SumOfLeft404 {
         TreeNode left = new TreeNode(9);
         TreeNode right = new TreeNode(20, right1, right2);
         TreeNode root = new TreeNode(3, left, right);
-        System.out.println(sumOfLeftLeaves1(root));
+        System.out.println(sumOfLeftLeaves(root));
+    }
+
+
+//    recursive; time: O(n), space: O(n)
+//    [if the tree is balanced then space complexity would be O(D) -> [depth of the tree: O(logn)]]
+    public static int sumOfLeftLeaves(TreeNode root) {
+        return processSubtree(root, false);
+    }
+    private static int processSubtree(TreeNode node, boolean isLeft) {
+        if(node == null)
+            return 0;
+        if(node.left == null && node.right == null)
+            return isLeft ? node.val : 0;
+        return processSubtree(node.left, true) +
+                processSubtree(node.right, false);
+    }
+
+//    iterative; time: O(n), space: O(n)
+    public static int sumOfLeftLeaves1(TreeNode root) {
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        int sum = 0;
+        while(!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+
+            if(isLeaf(node.left))
+                sum += node.left.val;
+
+            if(node.right != null)
+                stack.push(node.right);
+
+            if(node.left != null)
+                stack.push(node.left);
+        }
+
+        return sum;
+    }
+
+    private static boolean isLeaf(TreeNode node){
+        return node != null && node.left == null && node.right == null;
     }
 
     //    [def]; recursion; time: O(n), space: O(n)
-    public static int sumOfLeftLeaves(TreeNode root) {
+    public static int sumOfLeftLeaves2(TreeNode root) {
         int sum = 0;
         return helper(root, false, sum);
     }
@@ -37,7 +77,7 @@ public class SumOfLeft404 {
 
 
 //    [def]; iteration; time: O(n), space: O(n)
-    public static int sumOfLeftLeaves1(TreeNode root) {
+    public static int sumOfLeftLeaves3(TreeNode root) {
         Deque<Pair<TreeNode, Boolean>> queue = new ArrayDeque<>();
         int sum = 0;
         queue.offer(new Pair<>(root, false));
