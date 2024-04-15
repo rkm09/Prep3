@@ -9,11 +9,13 @@ import java.util.Deque;
 public class SumRootToLeaf129 {
     private int sum = 0;
     public static void main(String[] args) {
-        TreeNode right = new TreeNode(3);
-        TreeNode left = new TreeNode(2);
+        TreeNode left1 = new TreeNode(3);
+        TreeNode left2 = new TreeNode(4);
+        TreeNode left = new TreeNode(2, left1, left2);
+        TreeNode right = new TreeNode(5);
         TreeNode root = new TreeNode(1, left, right);
         SumRootToLeaf129 s = new SumRootToLeaf129();
-        System.out.println(s.sumNumbers1(root));
+        System.out.println(s.sumNumbers2(root));
     }
 
     //    recursive preorder; time: O(n), space: O(n)
@@ -60,6 +62,7 @@ public class SumRootToLeaf129 {
     public int sumNumbers2(TreeNode root) {
         TreeNode node = root;
         int totalSum = 0, currNum = 0, steps;
+
         while(node != null) {
             if(node.left == null) {
                 currNum = 10 * currNum + node.val;
@@ -68,7 +71,8 @@ public class SumRootToLeaf129 {
                     totalSum += currNum;
                 }
                 node = node.right;
-            } else {
+            }
+            else {
                 TreeNode predecessor = node.left;
                 steps = 1;
                 while(predecessor.right != null && predecessor.right != node) {
