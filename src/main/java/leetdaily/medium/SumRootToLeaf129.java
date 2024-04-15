@@ -64,15 +64,7 @@ public class SumRootToLeaf129 {
         int totalSum = 0, currNum = 0, steps;
 
         while(node != null) {
-            if(node.left == null) {
-                currNum = 10 * currNum + node.val;
-//                if this is a leaf, update total
-                if(node.right == null) {
-                    totalSum += currNum;
-                }
-                node = node.right;
-            }
-            else {
+            if(node.left != null) {
                 TreeNode predecessor = node.left;
                 steps = 1;
                 while(predecessor.right != null && predecessor.right != node) {
@@ -97,6 +89,14 @@ public class SumRootToLeaf129 {
                     predecessor.right = null;
                     node = node.right;
                 }
+            }
+            else {
+                currNum = 10 * currNum + node.val;
+//                if this is a leaf, update total
+                if(node.right == null) {
+                    totalSum += currNum;
+                }
+                node = node.right;
             }
         }
         return totalSum;
