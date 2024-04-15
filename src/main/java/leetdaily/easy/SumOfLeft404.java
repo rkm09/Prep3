@@ -16,10 +16,38 @@ public class SumOfLeft404 {
         System.out.println(sumOfLeftLeaves(root));
     }
 
+//    morris traversal; time: O(n), space: O(1)
+    public static int sumOfLeftLeaves(TreeNode root) {
+        if(root == null) return 0;
+        TreeNode node = root;
+        int totalSum = 0;
+        while(node != null) {
+            if(node.left == null) {
+                node = node.right;
+            } else {
+                TreeNode predecessor = node.left;
+//                check if the left node is a leaf node
+                if(predecessor.left == null && predecessor.right == null)
+                    totalSum += predecessor.val;
+
+                while(predecessor.right != null && predecessor.right != node)
+                    predecessor = predecessor.right;
+
+                if(predecessor.right == null) {
+                    predecessor.right = node;
+                    node = node.left;
+                } else {
+                    predecessor.right = null;
+                    node = node.right;
+                }
+            }
+        }
+        return totalSum;
+    }
 
 //    recursive; time: O(n), space: O(n)
 //    [if the tree is balanced then space complexity would be O(D) -> [depth of the tree: O(logn)]]
-    public static int sumOfLeftLeaves(TreeNode root) {
+    public static int sumOfLeftLeaves1(TreeNode root) {
         return processSubtree(root, false);
     }
     private static int processSubtree(TreeNode node, boolean isLeft) {
@@ -32,7 +60,7 @@ public class SumOfLeft404 {
     }
 
 //    iterative; time: O(n), space: O(n)
-    public static int sumOfLeftLeaves1(TreeNode root) {
+    public static int sumOfLeftLeaves2(TreeNode root) {
         Deque<TreeNode> stack = new ArrayDeque<>();
         stack.push(root);
         int sum = 0;
@@ -57,7 +85,7 @@ public class SumOfLeft404 {
     }
 
     //    [def]; recursion; time: O(n), space: O(n)
-    public static int sumOfLeftLeaves2(TreeNode root) {
+    public static int sumOfLeftLeaves3(TreeNode root) {
         int sum = 0;
         return helper(root, false, sum);
     }
@@ -77,7 +105,7 @@ public class SumOfLeft404 {
 
 
 //    [def]; iteration; time: O(n), space: O(n)
-    public static int sumOfLeftLeaves3(TreeNode root) {
+    public static int sumOfLeftLeaves4(TreeNode root) {
         Deque<Pair<TreeNode, Boolean>> queue = new ArrayDeque<>();
         int sum = 0;
         queue.offer(new Pair<>(root, false));
