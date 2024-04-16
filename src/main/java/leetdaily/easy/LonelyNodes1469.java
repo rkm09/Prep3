@@ -2,7 +2,9 @@ package leetdaily.easy;
 
 import common.TreeNode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 public class LonelyNodes1469 {
@@ -30,6 +32,24 @@ public class LonelyNodes1469 {
             helper(node.left);
             helper(node.right);
         }
+    }
+
+    //    [def]; iterative; time: O(n), space: O(n)
+    public List<Integer> getLonelyNodes1(TreeNode root) {
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        while(!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            if(node.left != null && node.right == null)
+                result.add(node.left.val);
+            else if(node.left == null && node.right != null)
+                result.add(node.right.val);
+            if(node.right != null)
+                stack.push(node.right);
+            if(node.left != null)
+                stack.push(node.left);
+        }
+        return result;
     }
 }
 
