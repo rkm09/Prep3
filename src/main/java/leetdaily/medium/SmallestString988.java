@@ -7,7 +7,7 @@ import java.util.*;
 
 
 public class SmallestString988 {
-    private int smallest = Integer.MAX_VALUE;
+    List<String> res = new ArrayList<>();
     public static void main(String[] args) {
         TreeNode right2 = new TreeNode(4);
         TreeNode right1 = new TreeNode(3);
@@ -17,7 +17,7 @@ public class SmallestString988 {
         TreeNode left = new TreeNode(1, left1, left2);
         TreeNode root = new TreeNode(0, left, right);
         SmallestString988 s = new SmallestString988();
-        System.out.println(s.smallestFromLeaf(root));
+        System.out.println(s.smallestFromLeaf1(root));
     }
 
 //    iterative dfs; [def]; time: O(n), space: O(n)
@@ -25,15 +25,15 @@ public class SmallestString988 {
         Deque<Pair<TreeNode, String>> stack = new ArrayDeque<>();
         stack.push(new Pair<>(root, ""));
         List<String> result = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
+
         while(!stack.isEmpty()) {
             Pair<TreeNode, String> nodeInfo = stack.pop();
             TreeNode node = nodeInfo.getKey();
             String prefix = nodeInfo.getValue();
             char c = (char) (node.val + 97);
             if(node.left == null && node.right == null) {
-                result.add(sb.append(prefix + c).reverse().toString());
-                sb.setLength(0);
+                StringBuilder sb = new StringBuilder(prefix + c);
+                result.add(sb.reverse().toString());
             }
             if(node.right != null) {
                 stack.push(new Pair<>(node.right, prefix + c));
@@ -46,28 +46,22 @@ public class SmallestString988 {
         return result.get(0);
     }
 
+//    recursive dfs; [def]; time: O(n), space: O(n)
     public String smallestFromLeaf1(TreeNode root) {
-        char[] arr = new char[26];
-        for(int i = 0 ; i < 26 ; i++) {
-            arr[i] = (char) (i + 97);
-        }
-
-        return "";
+        helper(root, "");
+        Collections.sort(res);
+        return res.get(0);
     }
 
-    private int helper(TreeNode node) {
-        if(node == null) return 0;
-
+    private void helper(TreeNode node, String prefix) {
+        if(node == null) return;
+        char c = (char) (node.val + 97);
         if(node.left == null && node.right == null) {
-
-            return node.val;
+            StringBuilder sb = new StringBuilder(prefix + c);
+            res.add(sb.reverse().toString());
         }
-
-        int left = helper(node.left);
-        int right = helper(node.right);
-
-        smallest = Math.min(smallest, Math.min(left, right));
-        return smallest;
+        helper(node.left, prefix + c);
+        helper(node.right, prefix + c);
     }
 
 }
