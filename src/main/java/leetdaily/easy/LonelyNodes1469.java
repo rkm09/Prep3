@@ -1,5 +1,6 @@
 package leetdaily.easy;
 
+import common.Pair;
 import common.TreeNode;
 
 import java.util.ArrayDeque;
@@ -18,8 +19,21 @@ public class LonelyNodes1469 {
         System.out.println(l.getLonelyNodes(root));
     }
 
-//    [def]; recursive; time: O(n), space: O(n)
+//  dfs; time: O(n), space: O(n)
     public List<Integer> getLonelyNodes(TreeNode root) {
+        dfs(root, false);
+        return result;
+    }
+    private void dfs(TreeNode node, boolean isLonely) {
+        if(node == null) return;
+        if(isLonely)
+            result.add(node.val);
+        dfs(node.right, node.left == null);
+        dfs(node.left, node.right == null);
+    }
+
+//    [def]; recursive; time: O(n), space: O(n)
+    public List<Integer> getLonelyNodes1(TreeNode root) {
         helper(root);
         return result;
     }
@@ -35,19 +49,39 @@ public class LonelyNodes1469 {
     }
 
     //    [def]; iterative; time: O(n), space: O(n)
-    public List<Integer> getLonelyNodes1(TreeNode root) {
+    public List<Integer> getLonelyNodes2(TreeNode root) {
         Deque<TreeNode> stack = new ArrayDeque<>();
         stack.push(root);
         while(!stack.isEmpty()) {
             TreeNode node = stack.pop();
-            if(node.left != null && node.right == null)
-                result.add(node.left.val);
-            else if(node.left == null && node.right != null)
-                result.add(node.right.val);
-            if(node.right != null)
+            if(node.right != null) {
                 stack.push(node.right);
-            if(node.left != null)
+                if(node.left == null)
+                    result.add(node.right.val);
+            }
+            if(node.left != null) {
                 stack.push(node.left);
+                if(node.right == null)
+                    result.add(node.left.val);
+            }
+        }
+        return result;
+    }
+
+    //    bfs; time: O(n), space: O(n) [slowest probably 'coz of pair]
+    public List<Integer> getLonelyNodes3(TreeNode root) {
+        Deque<Pair<TreeNode, Boolean>> queue = new ArrayDeque<>();
+        queue.offer(new Pair<>(root, false));
+        while(!queue.isEmpty()) {
+            Pair<TreeNode, Boolean> nodeInfo = queue.poll();
+            TreeNode node = nodeInfo.getKey();
+            boolean isLonely = nodeInfo.getValue();
+            if(isLonely)
+                result.add(node.val);
+            if(node.left != null)
+                queue.offer(new Pair<>(node.left, node.right == null));
+            if(node.right != null)
+                queue.offer(new Pair<>(node.right, node.left == null));
         }
         return result;
     }
