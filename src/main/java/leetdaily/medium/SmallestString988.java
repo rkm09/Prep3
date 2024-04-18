@@ -7,6 +7,7 @@ import java.util.*;
 
 
 public class SmallestString988 {
+    String smallestString  = "";
     List<String> res = new ArrayList<>();
     public static void main(String[] args) {
         TreeNode right2 = new TreeNode(4);
@@ -17,37 +18,59 @@ public class SmallestString988 {
         TreeNode left = new TreeNode(1, left1, left2);
         TreeNode root = new TreeNode(0, left, right);
         SmallestString988 s = new SmallestString988();
-        System.out.println(s.smallestFromLeaf1(root));
+        System.out.println(s.smallestFromLeaf(root));
     }
 
-//    iterative dfs; [def]; time: O(n), space: O(n)
+//    recursive dfs; time: O(n.n), space: O(n.n)
+//    During each node visit in DFS, a new string is constructed by concatenating characters. Since string concatenation takes O(n) time
+//    and the length of the string grows with each recursive call, the time complexity of constructing and comparing each string in the worst case(skewed tree) is O(n).
+//    Additionally, each node in the tree is visited once.
     public String smallestFromLeaf(TreeNode root) {
-        Deque<Pair<TreeNode, String>> stack = new ArrayDeque<>();
-        stack.push(new Pair<>(root, ""));
-        List<String> result = new ArrayList<>();
+        dfs(root, "");
+        return smallestString;
+    }
+    private void dfs(TreeNode node, String suffix) {
+        if(node == null) return;
+        String currentString = (char) (node.val + 'a') + suffix;
+        if(node.left == null && node.right == null) {
+            if(smallestString.isEmpty() || smallestString.compareTo(currentString) > 0)
+                smallestString = currentString;
+        }
+        if(node.left != null) {
+            dfs(node.left, currentString);
+        }
+        if(node.right != null) {
+            dfs(node.right, currentString);
+        }
+    }
 
-        while(!stack.isEmpty()) {
-            Pair<TreeNode, String> nodeInfo = stack.pop();
+//    iterative bfs; time: O(n.n), space: O(n.n)
+    public String smallestFromLeaf1(TreeNode root) {
+        Deque<Pair<TreeNode, String>> queue = new ArrayDeque<>();
+        queue.offer(new Pair<>(root, ""));
+        while(!queue.isEmpty()) {
+            Pair<TreeNode, String> nodeInfo = queue.poll();
             TreeNode node = nodeInfo.getKey();
-            String prefix = nodeInfo.getValue();
+            String suffix = nodeInfo.getValue();
             char c = (char) (node.val + 97);
+            String currentString = c + suffix;
+
             if(node.left == null && node.right == null) {
-                StringBuilder sb = new StringBuilder(prefix + c);
-                result.add(sb.reverse().toString());
-            }
-            if(node.right != null) {
-                stack.push(new Pair<>(node.right, prefix + c));
+                if(smallestString.isEmpty() || smallestString.compareTo(currentString) > 0)
+                    smallestString = currentString;
             }
             if(node.left != null) {
-                stack.push(new Pair<>(node.left, prefix + c));
+                queue.offer(new Pair<>(node.left, currentString));
+            }
+            if(node.right != null) {
+                queue.offer(new Pair<>(node.right, currentString));
             }
         }
-        Collections.sort(result);
-        return result.get(0);
+        return smallestString;
     }
 
-//    recursive dfs; [def]; time: O(n), space: O(n)
-    public String smallestFromLeaf1(TreeNode root) {
+//     recursive dfs; [def]; time: O(n.n), space: O(n.n)
+    public String smallestFromLeaf2(TreeNode root) {
         helper(root, "");
         Collections.sort(res);
         return res.get(0);
@@ -62,6 +85,31 @@ public class SmallestString988 {
         }
         helper(node.left, prefix + c);
         helper(node.right, prefix + c);
+    }
+
+
+//    bfs; [def]; time: O(n.n), space: O(n.n)
+    public String smallestFromLeaf3(TreeNode root) {
+        Deque<Pair<TreeNode, String>> queue = new ArrayDeque<>();
+        queue.offer(new Pair<>(root, ""));
+        while(!queue.isEmpty()) {
+            Pair<TreeNode, String> nodeInfo = queue.poll();
+            TreeNode node = nodeInfo.getKey();
+            String prefix = nodeInfo.getValue();
+            char c = (char) (node.val + 97);
+            if(node.left == null && node.right == null) {
+                StringBuilder sb = new StringBuilder(prefix + c);
+                res.add(sb.reverse().toString());
+            }
+            if(node.left != null) {
+                queue.offer(new Pair<>(node.left, prefix + c));
+            }
+            if(node.right != null) {
+                queue.offer(new Pair<>(node.right, prefix + c));
+            }
+        }
+        Collections.sort(res);
+        return res.get(0);
     }
 
 }
