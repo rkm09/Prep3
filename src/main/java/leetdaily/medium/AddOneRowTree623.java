@@ -44,26 +44,68 @@ public class AddOneRowTree623 {
         }
     }
 
+//    dfs iterative; time: O(n), space: O(n)
     public TreeNode addOneRow1(TreeNode root, int val, int depth) {
-        Deque<Pair<TreeNode, Integer>> queue = new ArrayDeque<>();
-        queue.offer(new Pair<>(root, 0));
-        while(!queue.isEmpty()) {
-            Pair<TreeNode, Integer> nodeInfo = queue.poll();
+        if(depth == 1) {
+            TreeNode node = new TreeNode(val);
+            node.left = root;
+            return node;
+        }
+        Deque<Pair<TreeNode, Integer>> stack = new ArrayDeque<>();
+        stack.push(new Pair<>(root, 1));
+        while(!stack.isEmpty()) {
+            Pair<TreeNode, Integer> nodeInfo = stack.pop();
             TreeNode node = nodeInfo.getKey();
             int level = nodeInfo.getValue();
             if(level + 1 == depth) {
-                TreeNode temp = new TreeNode(val);
-                temp.left = node.left;
-                temp.right = node.right;
-                node.left = temp;
-                node.right = temp;
-                break;
-            } else {
-                if(node.left != null)
-                    queue.offer(new Pair<>(node.left, level + 1));
-                if(node.right != null)
-                    queue.offer(new Pair<>(node.right, level + 1));
+                TreeNode temp = node.left;
+                node.left = new TreeNode(val);
+                node.left.left = temp;
+                temp = node.right;
+                node.right = new TreeNode(val);
+                node.right.right = temp;
             }
+            else {
+                if(node.right != null)
+                    stack.push(new Pair<>(node.right, level + 1));
+                if(node.left != null)
+                    stack.push(new Pair<>(node.left, level + 1));
+            }
+        }
+        return root;
+    }
+
+//    bfs; time: O(n), space: O(n)
+//    since bfs approach is level order (level by level), one can stop as soon as level is reached.
+    public TreeNode addOneRow2(TreeNode root, int val, int depth) {
+        if(depth == 1) {
+            TreeNode node = new TreeNode(val);
+            node.left = root;
+            return node;
+        }
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        queue.offer(root);
+        int level = 1;
+        while(level + 1 < depth) {
+            Deque<TreeNode> temp = new ArrayDeque<>();
+            while(!queue.isEmpty()) {
+                TreeNode node = queue.poll();
+                if(node.left != null)
+                    temp.offer(node.left);
+                if(node.right != null)
+                    temp.offer(node.right);
+            }
+            queue = temp;
+            level++;
+        }
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            TreeNode temp = node.left;
+            node.left = new TreeNode(val);
+            node.left.left = temp;
+            temp = node.right;
+            node.right = new TreeNode(val);
+            node.right.right = temp;
         }
         return root;
     }
