@@ -20,33 +20,30 @@ public class SmallestString988 {
         System.out.println(s.smallestFromLeaf(root));
     }
 
-//    dfs; time: O(n), space: O(n)
+//    iterative dfs; [def]; time: O(n), space: O(n)
     public String smallestFromLeaf(TreeNode root) {
         Deque<Pair<TreeNode, String>> stack = new ArrayDeque<>();
-        stack.push(new Pair<>(root,""));
-        List<String> words = new ArrayList<>();
+        stack.push(new Pair<>(root, ""));
+        List<String> result = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         while(!stack.isEmpty()) {
             Pair<TreeNode, String> nodeInfo = stack.pop();
             TreeNode node = nodeInfo.getKey();
-            String str = nodeInfo.getValue();
-            sb.append(str);
-            sb.append((char) (node.val + 97));
+            String prefix = nodeInfo.getValue();
+            char c = (char) (node.val + 97);
             if(node.left == null && node.right == null) {
-                words.add(sb.toString());
+                result.add(sb.append(prefix + c).reverse().toString());
                 sb.setLength(0);
             }
             if(node.right != null) {
-                stack.push(new Pair<>(node.right, str));
+                stack.push(new Pair<>(node.right, prefix + c));
             }
             if(node.left != null) {
-                stack.push(new Pair<>(node.left, str));
+                stack.push(new Pair<>(node.left, prefix + c));
             }
         }
-        Collections.sort(words);
-        System.out.println(words);
-        words.sort(Comparator.comparingInt(String::length));
-        return words.get(0);
+        Collections.sort(result);
+        return result.get(0);
     }
 
     public String smallestFromLeaf1(TreeNode root) {
@@ -62,6 +59,7 @@ public class SmallestString988 {
         if(node == null) return 0;
 
         if(node.left == null && node.right == null) {
+
             return node.val;
         }
 
