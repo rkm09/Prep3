@@ -19,7 +19,7 @@ public class FindAllGroups1992 {
 //    greedy; time: O(m.n), space: O(1) [in place]
     public int[][] findFarmland(int[][] land) {
         List<int[]> ans = new ArrayList<>();
-        int nr = land.length, nc = land.length;
+        int nr = land.length, nc = land[0].length;
 
         for(int row = 0 ; row < nr ; row++) {
             for(int col = 0 ; col < nc ; col++) {
