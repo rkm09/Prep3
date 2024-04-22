@@ -9,6 +9,9 @@ public class NumOfIslandsII305 {
         NumOfIslandsII305 n = new NumOfIslandsII305();
         System.out.println(n.numIslands2(3,3,positions));
     }
+
+
+//    union find; time: O(m.n + l), space: O(m.n) [l positions]
     public List<Integer> numIslands2(int m, int n, int[][] positions) {
         List<Integer> res = new ArrayList<>();
         UnionFind dsu = new UnionFind(m * n);
