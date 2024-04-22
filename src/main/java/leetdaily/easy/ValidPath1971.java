@@ -1,9 +1,6 @@
 package leetdaily.easy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ValidPath1971 {
     public static void main(String[] args) {
@@ -11,8 +8,15 @@ public class ValidPath1971 {
         System.out.println(validPath(3, edges, 0, 2));
     }
 
-//    dfs; time: O(v + e), space: O(v + e)
+
+//    iterative dfs; time: O(v + e), space: O(v + e)
     public static boolean validPath(int n, int[][] edges, int source, int destination) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        return true;
+    }
+
+//    recursive dfs; time: O(v + e), space: O(v + e)
+    public static boolean validPath1(int n, int[][] edges, int source, int destination) {
         Map<Integer, List<Integer>> graph = new HashMap<>();
         for(int[] edge : edges) {
             int u = edge[0], v = edge[1];
