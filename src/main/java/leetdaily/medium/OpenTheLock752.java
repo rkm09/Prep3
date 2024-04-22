@@ -56,6 +56,7 @@ public class OpenTheLock752 {
             int currLevelNodesCount = pendingCombinations.size();
             for(int i = 0 ; i < currLevelNodesCount ; i++) {
                 String currentCombination = pendingCombinations.poll();
+//                if a match is found return turn count
                 if(currentCombination.equals(target))
                     return turns;
 //                explore all possible combinations by turning each wheel in both directions
