@@ -1,11 +1,11 @@
 package leetdaily.easy;
 
 import common.Node;
+import common.Pair;
 
-import java.util.List;
+import java.util.*;
 
 public class MaxDepthOfNary559 {
-    private int depth = 0;
     public static void main(String[] args) {
         Node c4 = new Node(5);
         Node c5 = new Node(6);
@@ -19,19 +19,44 @@ public class MaxDepthOfNary559 {
         System.out.println(m.maxDepth(root));
     }
 
+
+//    recursion; time: O(n), space: O(n)
     public int maxDepth(Node root) {
-        dfs(root, 1);
-        return depth;
+        return dfs(root);
     }
-    private void dfs(Node node, int level) {
-        if(node == null) return;
-        for(Node child : node.children) {
-            if(child.children == null) {
-                depth = Math.max(depth, level);
-            } else dfs(child, level + 1);
+    private int dfs(Node node) {
+        if(node == null)
+            return 0;
+        else if(node.children.isEmpty())
+            return 1;
+        else {
+            List<Integer> heights = new ArrayList<>();
+            for(Node child : node.children) {
+                heights.add(maxDepth(child));
+            }
+            return Collections.max(heights) + 1;
         }
     }
 
+//    iteration; time: O(n), space: O(n)
+    public int maxDepth1(Node root) {
+        if(root == null) return 0;
+        int maxHeight = 0;
+        Deque<Pair<Node, Integer>> stack = new ArrayDeque<>();
+        stack.push(new Pair<>(root, 1));
+        while(!stack.isEmpty()) {
+            Pair<Node, Integer> nodeInfo = stack.pop();
+            Node node = nodeInfo.getKey();
+            int height = nodeInfo.getValue();
+            maxHeight = Math.max(maxHeight, height);
+            if(!node.children.isEmpty()) {
+                for(Node child : node.children) {
+                    stack.push(new Pair<>(child, height + 1));
+                }
+            }
+        }
+        return maxHeight;
+    }
 }
 
 /*
