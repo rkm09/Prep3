@@ -1,6 +1,10 @@
 package top150.trees;
 
+import common.Pair;
 import common.TreeNode;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class MaximumDepth104 {
     public static void main(String[] args) {
@@ -12,7 +16,7 @@ public class MaximumDepth104 {
         System.out.println(maxDepth(root));
     }
 
-//    dfs; time: O(n), space: O(n)
+//   recursion dfs; time: O(n), space: O(n)
     public static int maxDepth(TreeNode root) {
         return dfs(root);
     }
@@ -21,6 +25,25 @@ public class MaximumDepth104 {
         int leftHeight = dfs(node.left);
         int rightHeight = dfs(node.right);
         return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+//    iteration; time: O(n), space: O(n)
+    public static int maxDepth1(TreeNode root) {
+        if(root == null) return 0;
+        Deque<Pair<TreeNode, Integer>> stack = new ArrayDeque<>();
+        stack.push(new Pair<>(root, 1));
+        int maxDepth = 0;
+        while(!stack.isEmpty()) {
+            Pair<TreeNode, Integer> nodeInfo = stack.pop();
+            TreeNode node = nodeInfo.getKey();
+            int depth = nodeInfo.getValue();
+            maxDepth = Math.max(maxDepth, depth);
+            if(node.right != null)
+                stack.push(new Pair<>(node.right, depth + 1));
+            if(node.left != null)
+                stack.push(new Pair<>(node.left, depth + 1));
+        }
+        return maxDepth;
     }
 }
 
