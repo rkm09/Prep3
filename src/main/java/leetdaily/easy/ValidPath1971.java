@@ -1,18 +1,43 @@
 package leetdaily.easy;
 
+
 import java.util.*;
 
 public class ValidPath1971 {
     public static void main(String[] args) {
-        int[][] edges = {{0,1},{1,2},{2,0}};
-        System.out.println(validPath(3, edges, 0, 2));
+//        int[][] edges = {{0,1},{0,2},{3,5},{5,4},{4,3}};
+        int[][] edges = {{}};
+        System.out.println(validPath(1, edges, 0, 0));
     }
 
 
 //    iterative dfs; time: O(v + e), space: O(v + e)
     public static boolean validPath(int n, int[][] edges, int source, int destination) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        if(edges.length == 0) return true;
+        for(int[] edge : edges) {
+            int u = edge[0], v = edge[1];
+            graph.computeIfAbsent(u, k -> new ArrayList<>()).add(v);
+            graph.computeIfAbsent(v, k -> new ArrayList<>()).add(u);
+        }
         Deque<Integer> stack = new ArrayDeque<>();
-        return true;
+        stack.push(edges[0][0]);
+        boolean[] seen = new boolean[n];
+        while(!stack.isEmpty()) {
+            int currNode = stack.pop();
+            if(!seen[currNode]) {
+                seen[currNode] = true;
+                if(currNode == destination)
+                    return true;
+                for(int nextNode : graph.get(currNode)) {
+                    seen[nextNode] = true;
+                    if(nextNode == destination)
+                        return true;
+                    stack.push(nextNode);
+                }
+            }
+        }
+        return false;
     }
 
 //    recursive dfs; time: O(v + e), space: O(v + e)
