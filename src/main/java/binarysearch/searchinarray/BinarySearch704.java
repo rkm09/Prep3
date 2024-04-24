@@ -6,7 +6,7 @@ public class BinarySearch704 {
         System.out.println(search(nums, 9));
     }
 
-//    bin search; time: O(logn), space: O(1)
+//    bin search (find the exact value); time: O(logn), space: O(1)
     public static int search(int[] nums, int target) {
         int left = 0, right = nums.length - 1;
         while(left <= right) {
@@ -18,6 +18,39 @@ public class BinarySearch704 {
             else
                 right = mid - 1;
         }
+        return -1;
+    }
+
+//    insert at upper bound; time: O(logn), space: O(1) 
+//    instead of looking for target in the array nums, we look for the insert position (insert into the rightmost possible position)
+    public static int search1(int[] nums, int target) {
+//      the maximum insert position will be nums.length
+        int left = 0, right = nums.length;
+        while(left < right) {
+            int mid = left + (right - left) / 2;
+            if(nums[mid] <= target)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        if(left > 0 && nums[left - 1] == target)
+            return left - 1;
+        return -1;
+    }
+
+//    insert at lower bound; time: O(logn), space: O(1)
+//    insert into the leftmost possible position
+    public static int search2(int[] nums, int target) {
+        int left = 0, right = nums.length;
+        while(left < right) {
+            int mid = left + (right - left) / 2;
+            if(nums[mid] >= target)
+                right = mid;
+            else
+                left = mid + 1;
+        }
+        if(left < nums.length && nums[left] == target)
+            return left;
         return -1;
     }
 }
