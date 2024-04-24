@@ -7,6 +7,8 @@ public class NthTribonacci1137 {
     public static void main(String[] args) {
         System.out.println(tribonacci(4));
     }
+
+//    [def]; time: O(n), space: O(n)
     public static int tribonacci(int n) {
         if(n < 2) return n;
         cache = new int[n + 1];
@@ -19,6 +21,20 @@ public class NthTribonacci1137 {
     private static int helper(int n) {
         if(cache[n] != -1) return cache[n];
         cache[n] = helper(n - 1) + helper(n - 2) + helper(n - 3);
+        return cache[n];
+    }
+
+//    dp[def]; time: O(n), space: O(n)
+    public static int tribonacci1(int n) {
+        if(n < 2) return n;
+        cache = new int[n + 1];
+        Arrays.fill(cache, -1);
+        cache[0] = 0;
+        cache[1] = 1;
+        cache[2] = 1;
+        for(int i = 3 ; i <= n ; i++) {
+            cache[i] = cache[i - 1] + cache[i - 2] + cache[i - 3];
+        }
         return cache[n];
     }
 }
