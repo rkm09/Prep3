@@ -8,7 +8,21 @@ public class NthTribonacci1137 {
         System.out.println(tribonacci(4));
     }
 
-//    [def]; time: O(n), space: O(n)
+//    better bottom up dp; time: O(n), space: O(1)
+    public static int tribonacci2(int n) {
+        if(n < 3)
+            return n > 0 ? 1 : 0;
+        int a = 0, b = 1, c = 1;
+        for(int i = 3 ; i <= n ; i++) {
+            int tmp = a + b + c;
+            a = b;
+            b = c;
+            c = tmp;
+        }
+        return c;
+    }
+
+//    top down recursive dp[def]; time: O(n), space: O(n)
     public static int tribonacci(int n) {
         if(n < 2) return n;
         cache = new int[n + 1];
@@ -24,7 +38,7 @@ public class NthTribonacci1137 {
         return cache[n];
     }
 
-//    dp[def]; time: O(n), space: O(n)
+//    bottom up (iterative) dp[def]; time: O(n), space: O(n)
     public static int tribonacci1(int n) {
         if(n < 2) return n;
         cache = new int[n + 1];
@@ -37,6 +51,7 @@ public class NthTribonacci1137 {
         }
         return cache[n];
     }
+
 }
 
 /*
