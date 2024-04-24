@@ -22,16 +22,13 @@ public class MaxDepthOfNary559 {
 
 //    recursion; time: O(n), space: O(n)
     public int maxDepth(Node root) {
-        return dfs(root);
-    }
-    private int dfs(Node node) {
-        if(node == null)
+        if(root == null)
             return 0;
-        else if(node.children.isEmpty())
+        else if(root.children.isEmpty())
             return 1;
         else {
             List<Integer> heights = new ArrayList<>();
-            for(Node child : node.children) {
+            for(Node child : root.children) {
                 heights.add(maxDepth(child));
             }
             return Collections.max(heights) + 1;

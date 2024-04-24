@@ -1,9 +1,6 @@
 package leetdaily.medium;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MinHeightTrees310 {
     public static void main(String[] args) {
@@ -45,7 +42,7 @@ public class MinHeightTrees310 {
         while(remainingNodes > 2) {
             remainingNodes -= leaves.size();
             List<Integer> nextLeaves = new ArrayList<>();
-            for(int leaf : leaves) {
+            for(Integer leaf : leaves) {
                 int neighbour = graph.get(leaf).iterator().next();
                 graph.get(neighbour).remove(leaf);
                 if(graph.get(neighbour).size() == 1)
@@ -53,6 +50,51 @@ public class MinHeightTrees310 {
             }
             leaves = nextLeaves;
         }
+        return leaves;
+    }
+
+//        topological sort; time: O(n), space: O(n)
+//    same thing except for the graph being hash map [slower]
+    public static List<Integer> findMinHeightTrees1(int n, int[][] edges) {
+//        edge cases
+        if(n < 2) {
+            List<Integer> centroids = new ArrayList<>();
+            for(int i = 0 ; i < n ; i++)
+                centroids.add(i);
+            return centroids;
+        }
+//        build the graph with the adjacency list
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for(int[] edge : edges) {
+            int u = edge[0], v = edge[1];
+            graph.computeIfAbsent(u, k -> new ArrayList<>()).add(v);
+            graph.computeIfAbsent(v, k -> new ArrayList<>()).add(u);
+        }
+
+//        initialize the first layer of leaves
+        List<Integer> leaves = new ArrayList<>();
+        for(int i = 0 ; i < n ; i++) {
+            if(graph.get(i).size() == 1)
+                leaves.add(i);
+        }
+//        trim leaves till centroids alone remain
+        int remainingLeaves = n;
+        while(remainingLeaves > 2) {
+            remainingLeaves -= leaves.size();
+            List<Integer> newLeaves = new ArrayList<>();
+            for(Integer leaf : leaves) {
+//                the only neighbour left on the leaf node
+                int neighbour = graph.get(leaf).iterator().next();
+//                remove the edge along with the leaf node [note: this should be Integer object else it
+//                will throw index oob as it will take int as an index removal rather than object removal]
+                graph.get(neighbour).remove(leaf);
+                if(graph.get(neighbour).size() == 1)
+                    newLeaves.add(neighbour);
+            }
+//            prepare for the next round of leaves
+            leaves = newLeaves;
+        }
+
         return leaves;
     }
 }
