@@ -42,8 +42,6 @@ public class NthTribonacci1137 {
     public static int tribonacci1(int n) {
         if(n < 2) return n;
         cache = new int[n + 1];
-        Arrays.fill(cache, -1);
-        cache[0] = 0;
         cache[1] = 1;
         cache[2] = 1;
         for(int i = 3 ; i <= n ; i++) {
