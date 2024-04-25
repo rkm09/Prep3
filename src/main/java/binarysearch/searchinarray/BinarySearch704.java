@@ -21,7 +21,7 @@ public class BinarySearch704 {
         return -1;
     }
 
-//    insert at upper bound; time: O(logn), space: O(1) 
+//    insert at upper bound; time: O(logn), space: O(1)
 //    instead of looking for target in the array nums, we look for the insert position (insert into the rightmost possible position)
     public static int search1(int[] nums, int target) {
 //      the maximum insert position will be nums.length
