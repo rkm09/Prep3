@@ -13,6 +13,7 @@ public class MinFallPathSumII1289 {
                 dp[i][j] = Math.min(dp[i + 1][j + 1], Math.min(dp[i + 1][j - 1], dp[i + 1][j]));
             }
         }
+        return 0;
     }
 }
 
