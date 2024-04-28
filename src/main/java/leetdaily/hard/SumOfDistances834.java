@@ -7,11 +7,11 @@ public class SumOfDistances834 {
     private int N;
     private List<Set<Integer>> graph;
     public static void main(String[] args) {
-//        int[][] edges = {{0,1},{0,2},{2,3},{2,4},{2,5}};
-        int[][] edges = {{}};
+        int[][] edges = {{0,1},{0,2},{2,3},{2,4},{2,5}};
+//        int[][] edges = {{}};
         SumOfDistances834 s = new SumOfDistances834();
-        System.out.println(Arrays.toString(s.sumOfDistancesInTree(1, edges)));
-//        System.out.println(Arrays.toString(s.sumOfDistancesInTree(6, edges)));
+//        System.out.println(Arrays.toString(s.sumOfDistancesInTree(1, edges)));
+        System.out.println(Arrays.toString(s.sumOfDistancesInTree(6, edges)));
     }
 
 //    time: O(n), space: O(n)
@@ -27,7 +27,9 @@ public class SumOfDistances834 {
             graph.add(new HashSet<>());
 //        initialize count
         Arrays.fill(count, 1);
+//        edge case
         if(n == 1) return ans;
+
         for(int[] edge : edges) {
             graph.get(edge[0]).add(edge[1]);
             graph.get(edge[1]).add(edge[0]);
