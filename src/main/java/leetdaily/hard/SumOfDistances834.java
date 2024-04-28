@@ -18,6 +18,7 @@ public class SumOfDistances834 {
 //    ans[x] = subtreeSum(x) + subtreeSum(y) + count[y]
 //    ans[y] = subtreeSum(x) + subtreeSum(y) + count[x]
 //    => ans[x] - ans[y] = count[y] - count[x] => ans[x] = ans[y] - count[x] + (N - count[x])
+//    ps: using map for graph leads to MLE;
     public int[] sumOfDistancesInTree(int n, int[][] edges) {
         graph = new ArrayList<>();
         this.N = n;
