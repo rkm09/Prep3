@@ -16,7 +16,7 @@ public class MinOperations2997 {
         return Integer.bitCount(finalXor ^ k);
     }
 
-//    bit manipulation; time: O(n), space: O(1)
+//    bit manipulation; time: O(n), space: O(1) [same time, less space]
 //    we always need to flip a single bit to change the XOR result of N bits.
 //    the result of XOR is 1 when the number of 1 bits is odd and 0 otherwise.
 //    this implies that if the XOR of N bits is 0, then an even number of the N bits are set to 1.
