@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class FreedomTrail504 {
     public static void main(String[] args) {
         String ring = "godding", key = "godding";
+//        String ring = "repetitive", key = "per";
         System.out.println(findRotateSteps(ring, key));
     }
 
