@@ -1,20 +1,85 @@
 package leetdaily.easy;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class ReversePrefix500 {
     public static void main(String[] args) {
         String word = "abcdefd";
         System.out.println(reversePrefix(word, 'd'));
     }
+
+//    sb[def]; time: O(n), space: O(n)
     public static String reversePrefix(String word, char ch) {
-        StringBuilder sb = new StringBuilder();
         int idx = word.indexOf(ch);
         if(idx == -1) return word;
+        StringBuilder sb = new StringBuilder();
         String prefix = word.substring(0, idx + 1);
         String suffix = word.substring(idx + 1);
         sb.append(prefix);
         sb.reverse().append(suffix);
 
         return sb.toString();
+    }
+
+//    find idx and fill res; time: O(n), space: O(n)
+    public static String reversePrefix1(String word, char ch) {
+        int idx = word.indexOf(ch);
+        if(idx == -1) return word;
+        StringBuilder result = new StringBuilder();
+        for(int i = 0 ; i < word.length() ; i++) {
+            if(i <= idx) {
+                result.append(word.charAt(idx - i));
+            } else
+                result.append(word.charAt(i));
+        }
+        return result.toString();
+    }
+
+//    two pointer; time: O(n), space: O(n)
+    public static String reversePrefix2(String word, char ch) {
+        char[] arr = word.toCharArray();
+        int left = 0;
+        for(int right = 0 ; right < word.length() ; right++) {
+            if(word.charAt(right) == ch) {
+                while(left < right) {
+                    swap(arr, left, right);
+                    left++;
+                    right--;
+                }
+                return new String(arr);
+            }
+        }
+        return word;
+    }
+
+    private static void swap(char[] arr, int idx1, int idx2) {
+        char temp = arr[idx1];
+        arr[idx1] = arr[idx2];
+        arr[idx2] = temp;
+    }
+
+//    stack; time: O(n), space: O(n) [slowest]
+    public static String reversePrefix3(String word, char ch) {
+        Deque<Character> stack = new ArrayDeque<>();
+        StringBuilder res = new StringBuilder();
+        int index = 0, n = word.length();
+        while(index < n) {
+            char c = word.charAt(index);
+            stack.push(c);
+            if(c == ch) {
+                while(!stack.isEmpty())
+                    res.append(stack.pop());
+                index++;
+                while(index < n) {
+                    res.append(word.charAt(index));
+                    index++;
+                }
+                return res.toString();
+            }
+            index++;
+        }
+        return word;
     }
 }
 
