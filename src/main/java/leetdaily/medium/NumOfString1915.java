@@ -6,7 +6,8 @@ public class NumOfString1915 {
         System.out.println(wonderfulSubstrings(word));
     }
     public static long wonderfulSubstrings(String word) {
-        
+        long res = 0L;
+        return res;
     }
 }
 
