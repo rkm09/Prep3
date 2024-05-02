@@ -21,7 +21,7 @@ public class LargestPositive2441 {
         }
 
         large.sort(Comparator.reverseOrder());
-        small.sort(Comparator.naturalOrder());
+        //small.sort(Comparator.naturalOrder()); gain of 4 ms by commenting this out
 
         for(int k : large) {
             for(int j : small) {
