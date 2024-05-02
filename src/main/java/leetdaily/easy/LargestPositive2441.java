@@ -1,9 +1,6 @@
 package leetdaily.easy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class LargestPositive2441 {
     public static void main(String[] args) {
@@ -11,8 +8,66 @@ public class LargestPositive2441 {
         System.out.println(findMaxK(nums));
     }
 
-//    def; time: O(nlogn), space: O(n)
+//    one pass bitset; time: O(n), space: O(1)
     public static int findMaxK(int[] nums) {
+        BitSet seen = new BitSet(2048);
+        int ans = -1;
+        for(int num : nums) {
+            int absNum = Math.abs(num);
+            if(absNum > ans && seen.get(-num + 1024))
+                ans = absNum;
+            seen.set(num + 1024);
+        }
+        return ans;
+    }
+
+//    one pass hashset; time: O(n), space: O(n)
+    public static int findMaxK1(int[] nums) {
+        Set<Integer> seen = new HashSet<>();
+        int ans = -1;
+        for(int num : nums) {
+            int absNum = Math.abs(num);
+//            if current is greater and its negation is present in seen
+            if(absNum > ans && seen.contains(-num))
+                ans = absNum;
+//            insert the current num into seen set
+            seen.add(num);
+        }
+        return ans;
+    }
+
+//    two pass hashset; time: O(n), space: O(n)
+    public static int findMaxK2(int[] nums) {
+        Set<Integer> neg = new HashSet<>();
+        for(int num : nums) {
+            if(num < 0)
+                neg.add(num);
+        }
+        int ans = -1;
+        for(int num : nums) {
+            if(num > ans && neg.contains(-num))
+                ans = num;
+        }
+        return ans;
+    }
+
+//    two pointer; time: O(nlogn), space: O(1)
+    public static int findMaxK3(int[] nums) {
+        Arrays.sort(nums);
+        int lo = 0, hi = nums.length - 1;
+        while(lo < hi) {
+            if(-nums[lo] == nums[hi])
+                return nums[hi];
+            if(-nums[lo] > nums[hi])
+                lo++;
+            else
+                hi--;
+        }
+        return -1;
+    }
+
+//    def; time: O(n^2) [faster than brute force though], space: O(n)
+    public static int findMaxK4(int[] nums) {
         List<Integer> large = new ArrayList<>();
         List<Integer> small = new ArrayList<>();
         for(int num : nums) {
@@ -21,7 +76,6 @@ public class LargestPositive2441 {
         }
 
         large.sort(Comparator.reverseOrder());
-        //small.sort(Comparator.naturalOrder()); gain of 4 ms by commenting this out
 
         for(int k : large) {
             for(int j : small) {
@@ -30,6 +84,20 @@ public class LargestPositive2441 {
             }
         }
         return -1;
+    }
+
+
+//    brute force; time: O(n^2), space: O(1)
+    public static int findMaxK5(int[] nums) {
+        int ans = -1;
+        for(int i : nums) {
+            for(int j : nums) {
+                if(i == -j) {
+                    ans = Math.max(ans, Math.abs(i));
+                }
+            }
+        }
+        return ans;
     }
 }
 
