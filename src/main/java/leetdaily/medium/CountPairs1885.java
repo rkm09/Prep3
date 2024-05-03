@@ -11,7 +11,8 @@ public class CountPairs1885 {
 
 //    sort and two pointer; time: O(nlogn), space: O(n)
 //    nums1[i] + nums1[j] > nums2[i] + nums2[j] => nums1[i] + nums1[j] - nums2[i] - nums2[j] > 0
-//    => diff(nums[i]) + diff(nums[j]) > 0 => if so, then every pair between the two diffs(sorted) is also valid
+//    => diff(nums[i]) + diff(nums[j]) > 0 => if so, then every pair between the two diffs(sorted) is also valid wrt 'j';
+//    eg. sorted diff: [-7,-3,0,5,6]
     public static long countPairs(int[] nums1, int[] nums2) {
         int n = nums1.length;
         long[] difference = new long[n];
@@ -31,6 +32,41 @@ public class CountPairs1885 {
                 right--;
             } else {
                 left++;
+            }
+        }
+        return result;
+    }
+
+
+//    sort & binary search; time: O(nlogn), space: O(n)
+    public static long countPairs1(int[] nums1, int[] nums2) {
+        int n = nums1.length;
+        long[] difference = new long[n];
+//        calculate differences
+        for(int i = 0 ; i < n ; i++) {
+            difference[i] = nums1[i] - nums2[i];
+        }
+//        sort the differences
+        Arrays.sort(difference);
+        long result = 0L;
+//       count valid pairs
+        for(int i = 0 ; i < n ; i++) {
+//            all indices following i form valid pairs
+            if(difference[i] > 0)
+                result += n - i - 1;
+            else {
+//            binary search to find the first index 'j' that forms a valid pair with i
+                int left = i + 1, right = n - 1;
+                while(left <= right) {
+                    int mid = left + (right - left) / 2;
+//                    if the diff makes a valid pair search in the left half, else search in the right half
+                    if(difference[i] + difference[mid] > 0)
+                        right = mid - 1;
+                    else
+                        left = mid + 1;
+                }
+//                after the search left points to the first index 'j' that forms a valid pair with i; so we count all the ones following that
+                result += n - left;
             }
         }
         return result;
