@@ -7,6 +7,7 @@ public class CountPairs1885 {
         System.out.println(countPairs(nums1, nums2));
     }
     public static long countPairs(int[] nums1, int[] nums2) {
+
         return 0L;
     }
 }
