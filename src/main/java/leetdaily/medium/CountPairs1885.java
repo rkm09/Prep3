@@ -67,6 +67,7 @@ public class CountPairs1885 {
                 }
 //                after the search left points to the first index 'j' that forms a valid pair with i; so we count all the ones following that
                 result += n - left;
+//                or result += n - right - 1;
             }
         }
         return result;
