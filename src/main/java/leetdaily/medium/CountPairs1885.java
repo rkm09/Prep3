@@ -1,14 +1,39 @@
 package leetdaily.medium;
 
+import java.util.Arrays;
+
 public class CountPairs1885 {
     public static void main(String[] args) {
         int[] nums1 = {2,1,2,1};
         int[] nums2 = {1,2,1,2};
         System.out.println(countPairs(nums1, nums2));
     }
-    public static long countPairs(int[] nums1, int[] nums2) {
 
-        return 0L;
+//    sort and two pointer; time: O(nlogn), space: O(n)
+//    nums1[i] + nums1[j] > nums2[i] + nums2[j] => nums1[i] + nums1[j] - nums2[i] - nums2[j] > 0
+//    => diff(nums[i]) + diff(nums[j]) > 0 => if so, then every pair between the two diffs(sorted) is also valid
+    public static long countPairs(int[] nums1, int[] nums2) {
+        int n = nums1.length;
+        long[] difference = new long[n];
+//        store the differences
+        for(int i = 0 ; i < n ; i++) {
+            difference[i] = nums1[i] - nums2[i];
+        }
+//        imp: sort the differences
+        Arrays.sort(difference);
+//        count the pairs
+        int left = 0, right = n - 1;
+        long result = 0L;
+        while(left < right) {
+            if(difference[left] + difference[right] > 0) {
+//                left makes a valid pair with right; right also makes a valid pair with indices in between
+                result += right - left;
+                right--;
+            } else {
+                left++;
+            }
+        }
+        return result;
     }
 }
 
