@@ -1,14 +1,43 @@
 package leetdaily.medium;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NumOfString1915 {
     public static void main(String[] args) {
-        String word = "aba";
+        String word = "aabb";
         System.out.println(wonderfulSubstrings(word));
     }
 
-//    count parity prefixes;
+//    count parity prefixes; time: O(NA) ~ O(N) as A is constant of 10, space: O(N) [(A < N) A is the number of distinct characters (10 a->j), N word length]
+//    For any substring in the input string word, we can represent it as the difference between two prefixes of s.
+//    This is because we can "subtract" the larger prefix from the smaller prefix to create this substring using the ^ (XOR) operator.
+//    The XOR function is equivalent to subtraction under modulo 2.
+//    Since there are only 10 distinct letters the string can consist of, we can use a bitmask of 10 bits to represent the parities of all letters in a string.
     public static long wonderfulSubstrings(String word) {
+        int n = word.length(), mask = 0;
         long res = 0L;
+
+//        create a frequency map; key -> bitmask, value -> frequency of bitmask key
+        Map<Integer, Integer> freq = new HashMap<>();
+//        empty prefix mask accounts for 1; (this value may be referenced for even count as well)
+        freq.put(0, 1);
+
+        for(int i = 0 ; i < n ; i++) {
+            char c = word.charAt(i);
+            int bit = c - 'a';
+//            flip the parity of the cth bit in the running prefix mask
+            mask ^= (1 << bit);
+//            count smaller prefixes that create substrings with no odd letters
+            res += freq.getOrDefault(mask, 0);
+//            increment value associated with mask by 1
+            freq.put(mask, freq.getOrDefault(mask, 0) + 1);
+
+//            loop through every possible letter that can appear an odd number of times in a substring
+            for(int oddC = 0 ; oddC < 10 ; oddC++) {
+                res += freq.getOrDefault((mask ^ (1 << oddC)), 0);
+            }
+        }
         return res;
     }
 }
