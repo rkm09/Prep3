@@ -38,6 +38,7 @@ public class NumOfString1915 {
                 res += freq.getOrDefault((mask ^ (1 << oddC)), 0);
             }
         }
+
         return res;
     }
 }
