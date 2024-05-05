@@ -28,7 +28,7 @@ public class NumOfString1915 {
             int bit = c - 'a';
 //            flip the parity of the cth bit in the running prefix mask
             mask ^= (1 << bit);
-//            count smaller prefixes that create substrings with no odd letters
+//            count smaller/even prefixes that create substrings with no odd letters
             res += freq.getOrDefault(mask, 0);
 //            increment value associated with mask by 1
             freq.put(mask, freq.getOrDefault(mask, 0) + 1);
