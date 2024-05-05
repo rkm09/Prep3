@@ -5,6 +5,8 @@ public class NumOfString1915 {
         String word = "aba";
         System.out.println(wonderfulSubstrings(word));
     }
+
+//    count parity prefixes;
     public static long wonderfulSubstrings(String word) {
         long res = 0L;
         return res;
