@@ -15,8 +15,21 @@ public class RemoveNodes2487 {
         System.out.println(removeNodes(head).val);
     }
 
-//    stack; time: O(n), space: O(n)
+//    recursion; time: O(n), space: O(n)
     public static ListNode removeNodes(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        ListNode nextNode = removeNodes(head.next);
+//        if head val is smaller, ignore current head val and pass back next instead
+        if(head.val < nextNode.val)
+            return nextNode;
+//        keep the current head; update it's next to point to received nextNode;
+        head.next = nextNode;
+        return head;
+    }
+
+//    stack; time: O(n), space: O(n)
+    public static ListNode removeNodes2(ListNode head) {
         ListNode current = head;
         Deque<ListNode> stack = new ArrayDeque<>();
         while(current != null) {

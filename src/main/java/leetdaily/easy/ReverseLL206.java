@@ -17,15 +17,15 @@ public class ReverseLL206 {
 //    iterative; time: O(n), space: O(1)
     public static ListNode reverseList(ListNode head) {
 //        keep track of previous and next;
-        ListNode prevNode = null;
+        ListNode prev = null;
         ListNode currNode = head;
         while(currNode != null) {
             ListNode nextNode = currNode.next;
-            currNode.next = prevNode;
-            prevNode = currNode;
+            currNode.next = prev;
+            prev = currNode;
             currNode = nextNode;
         }
-        return prevNode;
+        return prev;
     }
 
 //    recursive; time: O(n), space: O(n)
