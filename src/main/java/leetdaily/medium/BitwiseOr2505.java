@@ -1,8 +1,5 @@
 package leetdaily.medium;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BitwiseOr2505 {
     public static void main(String[] args) {
         int[] nums = {2,1,0,3};
