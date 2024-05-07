@@ -15,8 +15,49 @@ public class RemoveNodes2487 {
         System.out.println(removeNodes(head).val);
     }
 
-//    recursion; time: O(n), space: O(n)
+//    reverse twice (in-place); time: O(n), auxiliary space: O(1) [fastest]
     public static ListNode removeNodes(ListNode head) {
+//        reverse the original linked list
+        head = reverseList(head);
+
+        int maximum = 0;
+        ListNode prev = null;
+        ListNode current = head;
+
+//        traverse the list deleting nodes
+        while(current != null) {
+            maximum = Math.max(maximum, current.val);
+//            delete nodes that are smaller than maximum
+            if(current.val < maximum) {
+                prev.next = current.next;
+                ListNode deleteNode = current;
+                current = current.next;
+                deleteNode.next = null;
+            } else {
+                prev = current;
+                current = current.next;
+            }
+        }
+
+//        reverse again and return
+        return reverseList(head);
+    }
+
+    private static ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode current = head;
+        while(current != null) {
+            ListNode nextNode = current.next;
+            current.next = prev;
+            prev = current;
+            current = nextNode;
+        }
+        return prev;
+    }
+
+
+//    recursion; time: O(n), space: O(n)
+    public static ListNode removeNodes1(ListNode head) {
         if(head == null || head.next == null)
             return head;
         ListNode nextNode = removeNodes(head.next);
@@ -28,7 +69,9 @@ public class RemoveNodes2487 {
         return head;
     }
 
+
 //    stack; time: O(n), space: O(n)
+//    note: result list will always include the right most element. So safe to begin from there;
     public static ListNode removeNodes2(ListNode head) {
         ListNode current = head;
         Deque<ListNode> stack = new ArrayDeque<>();
@@ -56,6 +99,7 @@ public class RemoveNodes2487 {
 
         return resultList;
     }
+
 }
 
 /*
