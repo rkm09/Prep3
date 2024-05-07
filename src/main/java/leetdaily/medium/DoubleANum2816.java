@@ -11,15 +11,116 @@ public class DoubleANum2816 {
         ListNode next1 = new ListNode(9);
         ListNode next = new ListNode(9, next1);
         ListNode head = new ListNode(9, next);
-        ListNode res = doubleIt(head);
+        ListNode res = doubleIt1(head);
         while(res != null) {
             System.out.println(res.val);
             res = res.next;
         }
     }
 
-//    [def]; reverse list; time: O(n), space: O(1)
+//    one pointer(in-place); time: O(n), space: O(1) [fastest]
     public static ListNode doubleIt(ListNode head) {
+        if(head.val > 4)
+            head = new ListNode(0, head);
+        ListNode node = head;
+
+        while(node != null) {
+            node.val = (node.val * 2) % 10;
+            if(node.next != null && node.next.val > 4)
+                node.val++;
+            node = node.next;
+        }
+
+        return head;
+    }
+
+
+//    two pointer (in-place); time: O(n), space: O(1) [fastest]
+    public static ListNode doubleIt1(ListNode head) {
+        ListNode curr = head;
+        ListNode prev = null;
+
+        while(curr != null) {
+            int twiceOfVal = curr.val * 2;
+            if(twiceOfVal < 10)
+                curr.val = twiceOfVal;
+            else {
+                curr.val = twiceOfVal % 10;
+                if(prev != null)
+                    prev.val++;
+                else {
+                    head = new ListNode(1, curr);
+                }
+            }
+            prev = curr;
+            curr = curr.next;
+        }
+
+        return head;
+    }
+
+//    recursion; time: O(n), space: O(n)
+    public static ListNode doubleIt2(ListNode head) {
+        int carry = helper(head);
+        if(carry != 0)
+            head = new ListNode(carry, head);
+        return head;
+    }
+
+    private static int helper(ListNode head) {
+        if(head == null) return 0;
+        int doubledValue = head.val * 2 + helper(head.next);
+        head.val = doubledValue % 10;
+        return doubledValue / 10;
+    }
+
+//    stack; time: O(n), space: O(n)
+//    this approach ensures that we handle integer overflow concerns efficiently while also reducing the number of passes 
+//    through the linked list. (unlike the next approach)
+    public static ListNode doubleIt3(ListNode head) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        ListNode current = head;
+
+        while(current != null) {
+            stack.push(current.val);
+            current = current.next;
+        }
+
+        ListNode newTail = null;
+        int value = 0;
+
+        while(!stack.isEmpty() || value != 0) {
+            newTail = new ListNode(0, newTail);
+            if(!stack.isEmpty()) {
+                value += stack.pop() * 2;
+            }
+            newTail.val = value % 10;
+            value = value / 10;
+        }
+
+        return newTail;
+    }
+
+//    reverse list; time: O(n), space: O(1)
+    public static ListNode doubleIt4(ListNode head) {
+        ListNode resList = reverseList(head);
+        ListNode current = resList, previous = null;
+        int carry = 0;
+        while(current != null) {
+            int newValue = current.val * 2 + carry;
+            current.val = newValue % 10;
+            carry = newValue > 9 ? 1 : 0;
+            previous = current;
+            current = current.next;
+        }
+        if(carry != 0) {
+            previous.next = new ListNode(carry);
+        }
+        return reverseList(resList);
+    }
+
+//    [def]; reverse list; time: O(n), space: O(1) [fast]
+    public static ListNode doubleIt5(ListNode head) {
         if(head.val == 0) return head;
 
         head = reverseList(head);
