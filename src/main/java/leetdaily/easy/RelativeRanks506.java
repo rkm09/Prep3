@@ -1,20 +1,64 @@
 package leetdaily.easy;
 
+import common.Pair;
+
 import java.util.*;
 
 public class RelativeRanks506 {
     public static void main(String[] args) {
         int[] score = {5,4,3,2,1};
-        System.out.println(Arrays.toString(findRelativeRanks(score)));
+        System.out.println(Arrays.toString(findRelativeRanks2(score)));
     }
 
-//
+//  Priority queue; time: O(nlogn), space: O(n)
     public static String[] findRelativeRanks(int[] score) {
+        PriorityQueue<Pair<Integer, Integer>> pq = new PriorityQueue<>((a,b) -> b.getKey() - a.getKey());
+        for(int i = 0 ; i < score.length ; i++)
+            pq.add(new Pair<>(score[i], i));
         String[] res = new String[score.length];
+        int rank = 1, idx;
+        while(!pq.isEmpty()) {
+            idx = pq.poll().getValue();
+            if(rank == 1)
+                res[idx] = "Gold Medal";
+            else if(rank == 2)
+                res[idx] = "Silver Medal";
+            else if(rank == 3)
+                res[idx] = "Bronze Medal";
+            else
+                res[idx] = String.valueOf(rank);
+            rank++;
+        }
+
         return res;
     }
 
-//    def; time: O(nlogn), space: O(n)
+//    reverse sort; time: O(nlogn), space: O(n)
+    public static String[] findRelativeRanks2(int[] score) {
+        Map<Integer, Integer> indexMap = new HashMap<>();
+        int n = score.length;
+        for(int i = 0 ; i < n ; i++)
+            indexMap.put(i, score[i]);
+        List<Map.Entry<Integer, Integer>> li = indexMap.entrySet()
+                .stream().sorted(Comparator.comparingInt(a-> - a.getValue())).toList();
+        String[] res = new String[n]; int count = 0;
+        for(Map.Entry<Integer, Integer> entry : li) {
+            int idx = entry.getKey();
+            if(count == 0)
+                res[idx] = "Gold Medal";
+            else if(count == 1)
+                res[idx] = "Silver Medal";
+            else if(count == 2)
+                res[idx] = "Bronze Medal";
+            else
+                res[idx] = String.valueOf(count + 1);
+            count++;
+        }
+
+        return res;
+    }
+
+//    def; reverse sort; time: O(nlogn), space: O(n)
     public static String[] findRelativeRanks3(int[] score) {
         List<Integer> li = Arrays.stream(score).boxed().sorted(Comparator.reverseOrder()).toList();
         int count = 1, n = score.length;
