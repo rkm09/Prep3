@@ -10,6 +10,31 @@ public class RelativeRanks506 {
         System.out.println(Arrays.toString(findRelativeRanks2(score)));
     }
 
+    //    reverse sort; time: O(nlogn), space: O(n)
+    public static String[] findRelativeRanks2(int[] score) {
+        int n = score.length;
+        int[] scoreCopy = Arrays.copyOf(score, n);
+        Map<Integer, Integer> scoreToIndex = new HashMap<>();
+        for(int i = 0 ; i < n ; i++) {
+            scoreToIndex.put(scoreCopy[i], i);
+        }
+        Arrays.sort(scoreCopy);
+        String[] ranks = new String[n];
+        for(int i = 0 ; i < n ; i++) {
+            int idx = scoreToIndex.get(scoreCopy[n - 1 - i]);
+            if(i == 0)
+                ranks[idx] = "Gold Medal";
+            else if(i == 1)
+                ranks[idx] = "Silver Medal";
+            else if(i == 2)
+                ranks[idx] = "Bronze Medal";
+            else
+                ranks[idx] = String.valueOf(i + 1);
+        }
+
+        return ranks;
+    }
+
 //  Priority queue; time: O(nlogn), space: O(n)
     public static String[] findRelativeRanks(int[] score) {
         PriorityQueue<Pair<Integer, Integer>> pq = new PriorityQueue<>((a,b) -> b.getKey() - a.getKey());
@@ -33,8 +58,10 @@ public class RelativeRanks506 {
         return res;
     }
 
+
+
 //    reverse sort; time: O(nlogn), space: O(n)
-    public static String[] findRelativeRanks2(int[] score) {
+    public static String[] findRelativeRanks3(int[] score) {
         Map<Integer, Integer> indexMap = new HashMap<>();
         int n = score.length;
         for(int i = 0 ; i < n ; i++)
@@ -59,7 +86,7 @@ public class RelativeRanks506 {
     }
 
 //    def; reverse sort; time: O(nlogn), space: O(n)
-    public static String[] findRelativeRanks3(int[] score) {
+    public static String[] findRelativeRanks4(int[] score) {
         List<Integer> li = Arrays.stream(score).boxed().sorted(Comparator.reverseOrder()).toList();
         int count = 1, n = score.length;
         Map<Integer, Integer> map = new HashMap<>();
