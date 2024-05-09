@@ -7,7 +7,15 @@ public class RelativeRanks506 {
         int[] score = {5,4,3,2,1};
         System.out.println(Arrays.toString(findRelativeRanks(score)));
     }
+
+//
     public static String[] findRelativeRanks(int[] score) {
+        String[] res = new String[score.length];
+        return res;
+    }
+
+//    def; time: O(nlogn), space: O(n)
+    public static String[] findRelativeRanks3(int[] score) {
         List<Integer> li = Arrays.stream(score).boxed().sorted(Comparator.reverseOrder()).toList();
         int count = 1, n = score.length;
         Map<Integer, Integer> map = new HashMap<>();
