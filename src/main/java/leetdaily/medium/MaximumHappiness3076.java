@@ -10,7 +10,7 @@ public class MaximumHappiness3076 {
         System.out.println(maximumHappinessSum(happiness, 3));
     }
 
-//    def; sort; time: O(nlogn), space: O(1)
+//    def; sort; time: O(nlogn), space: O(logn) [fast]
     public static long maximumHappinessSum(int[] happiness, int k) {
         Arrays.sort(happiness);
         int n = happiness.length;
@@ -21,6 +21,32 @@ public class MaximumHappiness3076 {
             i++; j++;
         }
         return sum;
+    }
+
+//    sort + greedy; time: O(nlogn), space: O(logn) [fast] [same as def; instead using for]
+    public static long maximumHappinessSum1(int[] happiness, int k) {
+        Arrays.sort(happiness);
+        int n = happiness.length;
+        long sum = 0; int j = 0;
+        for(int i = n - 1 ; i >= n - k ; i--) {
+            int val = Math.max(happiness[i] - j++, 0);
+            sum += val;
+        }
+        return sum;
+    }
+
+//    priority queue & greedy; time: O(nlogn + klogn), space: O(n)
+//    time : inserting into pq -> nlogn + iterating through first k elements in pq [klogn] + deleting (pop) the top element [logn]
+    public static long maximumHappinessSum2(int[] happiness, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
+        for(int h : happiness)
+            pq.add(h);
+        long totalHappinessSum = 0; int turns = 0;
+        while(!pq.isEmpty() && turns < k) {
+            totalHappinessSum += Math.max(pq.poll() - turns++, 0);
+        }
+
+        return totalHappinessSum;
     }
 }
 
