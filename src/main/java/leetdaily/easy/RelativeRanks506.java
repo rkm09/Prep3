@@ -7,11 +7,18 @@ import java.util.*;
 public class RelativeRanks506 {
     public static void main(String[] args) {
         int[] score = {5,4,3,2,1};
-        System.out.println(Arrays.toString(findRelativeRanks2(score)));
+        System.out.println(Arrays.toString(findRelativeRanks(score)));
+    }
+
+//    array as map; time: O(m + n), space: O(m)
+    public static String[] findRelativeRanks(int[] score) {
+        int n = score.length;
+        String[] ranks = new String[n];
+        return ranks;
     }
 
     //    reverse sort; time: O(nlogn), space: O(n)
-    public static String[] findRelativeRanks2(int[] score) {
+    public static String[] findRelativeRanks1(int[] score) {
         int n = score.length;
         int[] scoreCopy = Arrays.copyOf(score, n);
         Map<Integer, Integer> scoreToIndex = new HashMap<>();
@@ -36,7 +43,7 @@ public class RelativeRanks506 {
     }
 
 //  Priority queue; time: O(nlogn), space: O(n)
-    public static String[] findRelativeRanks(int[] score) {
+    public static String[] findRelativeRanks2(int[] score) {
         PriorityQueue<Pair<Integer, Integer>> pq = new PriorityQueue<>((a,b) -> b.getKey() - a.getKey());
         for(int i = 0 ; i < score.length ; i++)
             pq.add(new Pair<>(score[i], i));
