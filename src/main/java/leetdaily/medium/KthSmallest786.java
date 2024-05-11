@@ -6,7 +6,7 @@ public class KthSmallest786 {
         System.out.println(kthSmallestPrimeFraction(arr, 3));
     }
     public static int[] kthSmallestPrimeFraction(int[] arr, int k) {
-        
+        return new int[]{};
     }
 }
 
