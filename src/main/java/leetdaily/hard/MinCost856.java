@@ -7,7 +7,7 @@ public class MinCost856 {
         System.out.println(mincostToHireWorkers(quality, wage, 2));
     }
     public static double mincostToHireWorkers(int[] quality, int[] wage, int k) {
-        
+        return 0.0;
     }
 }
 
