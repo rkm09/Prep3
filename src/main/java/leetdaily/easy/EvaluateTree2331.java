@@ -2,6 +2,11 @@ package leetdaily.easy;
 
 import common.TreeNode;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+
 public class EvaluateTree2331 {
     public static void main(String[] args) {
         TreeNode left = new TreeNode(1);
@@ -24,6 +29,34 @@ public class EvaluateTree2331 {
             return leftChild && rightChild;
     }
 
+//    iteration; time: O(n), space: O(n)
+    public static boolean evaluateTree1(TreeNode root) {
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        Map<TreeNode, Boolean> evaluated = new HashMap<>();
+        while(!stack.isEmpty()) {
+            TreeNode topNode = stack.peek();
+            if(topNode.left == null && topNode.right == null) {
+//                if node is a leaf node, store its value in the evaluated hashmap
+                stack.pop();
+                evaluated.put(topNode, topNode.val == 1);
+                continue;
+            }
+            if(evaluated.containsKey(topNode.left) && evaluated.containsKey(topNode.right)) {
+//                if both children are already present in evaluated hashmap, then evaluate the current operator
+                stack.pop();
+                if(topNode.val == 2)
+                    evaluated.put(topNode, evaluated.get(topNode.left) || evaluated.get(topNode.right));
+                else
+                    evaluated.put(topNode, evaluated.get(topNode.left) && evaluated.get(topNode.right));
+            }
+
+            stack.push(topNode.right);
+            stack.push(topNode.left);
+        }
+
+        return evaluated.get(root);
+    }
 }
 
 /*
