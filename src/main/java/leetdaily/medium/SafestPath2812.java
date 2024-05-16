@@ -14,19 +14,7 @@ public class SafestPath2812 {
         System.out.println(maximumSafenessFactor(grid));
     }
     public static int maximumSafenessFactor(List<List<Integer>> grid) {
-        int n = grid.size();
-        int[][] mat = new int[n][n];
-        Deque<int[]> queue = new ArrayDeque<>();
-        for(int i = 0 ; i < n ; i++) {
-            for(int j = 0 ; j < n ; j++) {
-                if(grid.get(i).get(j) == 1) {
-                    queue.offer(new int[]{i, j});
-                    mat[i][j] = 0;
-                } else
-                    mat[i][j] = -1;
-            }
-        }
-        
+        return 0;
     }
 }
 
