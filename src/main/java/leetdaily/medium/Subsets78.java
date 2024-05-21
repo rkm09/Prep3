@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Subsets78 {
+    private List<List<Integer>> output;
+    private int k, n;
     public static void main(String[] args) {
         int[] nums = {1,2,3};
-        List<List<Integer>> subsets = subsets(nums);
+        Subsets78 s = new Subsets78();
+        List<List<Integer>> subsets = s.subsets(nums);
         for(List<Integer> subset : subsets) {
             System.out.println(subset);
         }
     }
 
-//    cascading; time: O(N*2^N), space: O(N*2^N)  [generate all subsets and then copy them to result list]
-    public static List<List<Integer>> subsets(int[] nums) {
+//    cascading; time: O(N*2^N), space: O(N*2^N)
+//    generate all subsets with each element in current and then copy them to result list
+    public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         res.add(new ArrayList<>());
         for (int num : nums) {
@@ -27,6 +31,32 @@ public class Subsets78 {
 
         return res;
     }
+
+//    backtracking; time: O(N*2^N), space: O(N)
+//    generate all subsets of a particular length progressively and then backtrack
+    public List<List<Integer>> subsets1(int[] nums) {
+        n = nums.length;
+        output = new ArrayList<>();
+        for(k = 0 ; k < n + 1 ; k++) {
+            backtrack(0, new ArrayList<>(), nums);
+        }
+        return output;
+    }
+
+    private void backtrack(int first, List<Integer> curr, int[] nums) {
+        if(curr.size() == k) {
+//            remember can't add curr directly
+            output.add(new ArrayList<>(curr));
+            return;
+        }
+        for(int i = first ; i < n ; i++) {
+            curr.add(nums[i]);
+            backtrack(i + 1, curr, nums);
+            curr.remove(curr.size() - 1);
+        }
+    }
+
+    
 }
 
 /*
