@@ -7,9 +7,9 @@ public class Subsets78 {
     private List<List<Integer>> output;
     private int k, n;
     public static void main(String[] args) {
-        int[] nums = {1,2,3};
+        int[] nums = {4,2,3};
         Subsets78 s = new Subsets78();
-        List<List<Integer>> subsets = s.subsets(nums);
+        List<List<Integer>> subsets = s.subsets2(nums);
         for(List<Integer> subset : subsets) {
             System.out.println(subset);
         }
@@ -56,7 +56,27 @@ public class Subsets78 {
         }
     }
 
-    
+//    lexicographic subsets(binary sorted) subsets; time: O(N*2^N), space: O(N*2^N)
+    public List<List<Integer>> subsets2(int[] nums) {
+        output = new ArrayList<>();
+        n = nums.length;
+
+        for(int i = (int) Math.pow(2, n) ; i < (int) Math.pow(2, n + 1) ; i++) {
+//            generate all bitmasks from 00..0 to 11..1
+            String bitmask = Integer.toBinaryString(i).substring(1);
+
+//            append subset corresponding to that bitmask
+            List<Integer> curr = new ArrayList<>();
+            for(int j = 0 ; j < n ; j++) {
+                if(bitmask.charAt(j) == '1')
+                    curr.add(nums[j]);
+            }
+            output.add(curr);
+        }
+
+        return output;
+    }
+
 }
 
 /*
