@@ -7,9 +7,9 @@ public class Subsets78 {
     private List<List<Integer>> output;
     private int k, n;
     public static void main(String[] args) {
-        int[] nums = {4,2,3};
+        int[] nums = {1,2,3};
         Subsets78 s = new Subsets78();
-        List<List<Integer>> subsets = s.subsets2(nums);
+        List<List<Integer>> subsets = s.subsets(nums);
         for(List<Integer> subset : subsets) {
             System.out.println(subset);
         }
@@ -57,9 +57,20 @@ public class Subsets78 {
     }
 
 //    lexicographic subsets(binary sorted) subsets; time: O(N*2^N), space: O(N*2^N)
+//    the idea is that we map each subset to a bitmask of length n, 1 means the presence of nums[i] in the subset;
+//    to deal with zero left padding we start from 8 and end at 15 and take substring from 1; eg. 001 and not 1 => 1001 => (001);
     public List<List<Integer>> subsets2(int[] nums) {
         output = new ArrayList<>();
         n = nums.length;
+
+        /*
+            basic way:
+            int nthBit = 1 << n;
+            for(int i = 0 ; i < (int) Math.pow(2, n) ; i++) {
+                String bitmask = Integer.toBinaryString(i | nthBit).substring(1);
+            }
+           //  we can rather take the next 8 possibilities as mentioned below
+         */
 
         for(int i = (int) Math.pow(2, n) ; i < (int) Math.pow(2, n + 1) ; i++) {
 //            generate all bitmasks from 00..0 to 11..1
