@@ -6,23 +6,18 @@ public class SubsetXorSum1863 {
         System.out.println(subsetXORSum(nums));
     }
 
+//    backtracking; time: O(N*2^N), space: O(N*2^N)
     public static int subsetXORSum(int[] nums) {
-        int n = nums.length;
-        int sum = 0;
-        for(int i = 0 ; i < n ; i++) {
-            sum += nums[i];
-            for(int j = 0 ; j < i ; j++) {
-                sum += nums[i] ^ nums[j];
-            }
-        }
+        return 0;
+    }
 
-        return sum;
+    private void backtrack(int[] nums) {
 
     }
 }
 
 /*
-Te XOR total of an array is defined as the bitwise XOR of all its elements, or 0 if the array is empty.
+The XOR total of an array is defined as the bitwise XOR of all its elements, or 0 if the array is empty.
 For example, the XOR total of the array [2,5,6] is 2 XOR 5 XOR 6 = 1.
 Given an array nums, return the sum of all XOR totals for every subset of nums.
 Note: Subsets with the same elements should be counted multiple times.
