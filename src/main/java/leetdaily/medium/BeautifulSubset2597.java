@@ -15,9 +15,7 @@ public class BeautifulSubset2597 {
     public int beautifulSubsets(int[] nums, int k) {
         n = nums.length;
         output = new ArrayList<>();
-        for(len = 0 ; len < n ; len++) {
 
-        }
         return res;
     }
 
