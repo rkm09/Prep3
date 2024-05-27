@@ -13,7 +13,7 @@ public class SpecialArray1608 {
         Arrays.sort(nums);
         int n = nums.length;
         for(int i = 1 ; i <= n ; i++) {
-            int k = getFirstElementGreaterThanX(nums, i);
+            int k = getFirstElementGreaterThanEqualToX(nums, i);
             if(n - k == i)
                 return i;
         }
@@ -21,7 +21,7 @@ public class SpecialArray1608 {
         return -1;
     }
 
-    private static int getFirstElementGreaterThanX(int[] nums, int val) {
+    private static int getFirstElementGreaterThanEqualToX(int[] nums, int val) {
         int start = 0;
         int end = nums.length - 1;
         int index = nums.length;
